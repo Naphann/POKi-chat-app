@@ -19,6 +19,6 @@ chat application for distributed system course
 
 ## TO USE GULP
 
-- ```> gulp serve``` to start server
+1. to start server<br>```> gulp serve``` 
 
-- ```> gulp sass-watch``` to watch sass file and compile to css
+2. to watch sass file and compile to css<br>```> gulp sass-watch```
