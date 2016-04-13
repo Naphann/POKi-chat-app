@@ -1,0 +1,12 @@
+{
+	"extension.databases": [
+		{
+			"type": "mysql",
+			"name": "localhost (mysql)",
+			"host": "localhost:3306",
+			"user": "pokichat",
+			"password": "pokichat",
+			"database": null
+		}
+	]
+}
