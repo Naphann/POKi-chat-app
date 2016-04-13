@@ -12,6 +12,7 @@ var warn = clc.yellow;
 var info = clc.cyanBright;
 var success = clc.green;
 
+Promise.promisifyAll(fs);
 Promise.promisifyAll(require('mysql/lib/Connection').prototype);
 Promise.promisifyAll(require('mysql/lib/Pool').prototype);
 
@@ -62,6 +63,7 @@ gulp.task('create-database', function() {
             }
             return conn.queryAsync(query)
                 .then(function(msg) {
+                    // console.dir(msg);
                     console.log(info(`table ${query.split('(')[0].split(' ')[2]} created`));
                 });
         }).catch(function(err) {
@@ -69,7 +71,7 @@ gulp.task('create-database', function() {
             pool.end();
         });
     }).catch(function(err) {
-        console.log(info('fuck'));
+        console.log(error('wtf something went wrong.'));
     });
 });
 
@@ -96,11 +98,33 @@ gulp.task('test-database-connection', function() {
 });
 
 gulp.task('clean-database', function() {
-    console.log('cleaning database ...');
+    console.log(info('cleaning database ...'));
 });
 
 gulp.task('seed-database', function() {
-    console.log('seeding database ...');
+    bar();
+    console.log(info('seeding database ...'));
+    var buffer = fs.readFileSync('seeder.json', 'utf8');
+    var sql = JSON.parse(buffer);
+    using(getSqlConnection(), function(conn) {
+        Promise.each(sql.users, function(query, index) {
+            if (index === sql.users.length - 1) {
+                pool.end();
+                console.log(success('database seeded.'));
+                bar();
+                return;
+            }
+            return conn.queryAsync('insert into user set ?', query)
+                .then(function (msg) {
+                    console.log(info(`user ${query.username} created`));
+                });
+        }).catch(function(err) {
+            console.error(error(err));
+            pool.end();
+        });
+    }).catch(function(err) {
+        console.log(error('wtf something went wrong.'));
+    });
 });
 
 function bar() {

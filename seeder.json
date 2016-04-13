@@ -1,0 +1,34 @@
+{ 
+    "users": [
+        {             
+            "username": "poki",
+            "displayname": "poki",
+            "password": "$2a$10$R1inoiZrO/g6B3IbwmY7ROK7UBN34sO4n/b4xg3dWYt2Vfcsg.jvm"
+        },
+        {              
+            "username": "test",
+            "displayname": "test",
+            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+        },
+        {             
+            "username": "pual",
+            "displayname": "pual",
+            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+        },
+        {             
+            "username": "omar",
+            "displayname": "omar",
+            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+        },
+        {             
+            "username": "kim",
+            "displayname": "kim",
+            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+        },
+        {             
+            "username": "inging",
+            "displayname": "inging",
+            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+        }
+    ]
+}

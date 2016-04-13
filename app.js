@@ -4,41 +4,43 @@ var _ = require('lodash');
 
 var app = express();
 var http = require('http').createServer(app);
+var bodyParser = require('body-parser');
 var io = require('socket.io')();
-var mysql = require('./src/config/database-promise.js');
+var mysql = require('mysql');
+var pool = require('./src/config/database-promise.js');
 var using = require('bluebird').using;
+var Promise = require('bluebird');
 
-app.set('port', process.env.PORT || 6000);
+app.set('port', process.env.PORT || 3000);
+app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'src/views'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('src/static/css'));
 app.use(express.static('src/static/js'));
 app.use(express.static('src/static/lib'));
 app.use(express.static('src/views'));
 
-var viewOptions = {
-    root: __dirname + '/src/views/',
-    dotfiles: 'deny',
-    headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
-    }
-};
-
 app.get('/', (req, res) => {
-    res.sendFile('main.html', viewOptions);
-});
-
-function getUsers() {
-    using(mysql.foo(), (conn) => {
+    using(pool.getSqlConnection(), (conn) => {
         conn.queryAsync('SELECT * FROM USER')
-            .then((data) => {
-                console.log('this is the data:');
+            .then(function (results) {
+                return Promise.map(results, (user, idx) => {
+                    user.index = idx+1;
+                    return user;            
+                });
+            })
+            .then((users) => {               
+                var data = { users: users, arr: [{x:1},{x:2},{x:3}] };
                 console.log(data);
-                return 'hello';
-            }).then((data) => {
-                console.log('inner then' + data);
+                res.render('main', data);
             });
     });
-}
+});
 
-http.listen(3000, 'localhost');
+app.get('/test', (req, res) => {
+    res.end(`<h1>hello world</h1>`);
+});
+
+http.listen(app.get('port'));
+console.log(`magic happens at port ${app.get('port')}`);

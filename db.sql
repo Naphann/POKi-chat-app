@@ -3,13 +3,15 @@ create table user(
     username varchar(20),
     displayname varchar(20),
     password varchar(60),
-    primary key(user_id)
+    primary key(user_id),
+    unique (username)
 );
 --
 create table room(
     room_id int not null auto_increment,
     roomname varchar(20),
-    primary key(room_id)
+    primary key(room_id),
+    unique (roomname)
 );
 --
 create table message(
