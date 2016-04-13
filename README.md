@@ -25,7 +25,10 @@ chat application for distributed system course
 8. to create database <br>
 ``` > gulp create-database```
 
-9. to create user <br> 
+9. seed the database <br>
+``` > gulp seed-database```
+
+10. to create user <br> 
 ``` > node genuser.js --username=<username> --password=<password>```
 
 10. learn about nodejs bluebirdjs expressjs (if you're doing the server) and ejs if you're doing the frontend
