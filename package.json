@@ -11,6 +11,7 @@
     "url": "https://github.com/Naphann/POKi-chat-app.git"
   },
   "devDependencies": {
+    "cli-color": "^1.1.0",
     "gulp": "^3.9.1",
     "gulp-load-plugins": "^1.2.0",
     "gulp-nodemon": "^2.0.6",

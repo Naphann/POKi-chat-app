@@ -1,18 +1,45 @@
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 var mysql = require('mysql');
+var Promise = require('bluebird');
+var using = Promise.using;
+var clc = require('cli-color');
+var fs = require('fs');
+var _ = require('lodash');
 
-gulp.task('sass', function () {
+var error = clc.red.bold;
+var warn = clc.yellow;
+var info = clc.cyanBright;
+var success = clc.green;
+
+Promise.promisifyAll(require('mysql/lib/Connection').prototype);
+Promise.promisifyAll(require('mysql/lib/Pool').prototype);
+
+var pool = mysql.createPool({
+    connectionLimit: 100,
+    host: 'localhost',
+    user: 'pokichat',
+    password: 'pokichat',
+    database: 'pokichat'
+});
+
+function getSqlConnection() {
+    return pool.getConnectionAsync().disposer((connection) => {
+        connection.release();
+    });
+}
+
+gulp.task('sass', function() {
     return gulp.src('./src/static/scss/*.scss')
         .pipe($.sass({ outputStyle: 'compressed' }).on('error', $.sass.logError))
         .pipe(gulp.dest('./src/static/css'));
 });
 
-gulp.task('sass-watch', function () {
+gulp.task('sass-watch', function() {
     gulp.watch('./src/static/scss/*.scss', ['sass']);
 });
 
-gulp.task('serve', function () {
+gulp.task('serve', function() {
     $.nodemon({
         script: 'app.js',
         ext: 'js html',
@@ -20,14 +47,62 @@ gulp.task('serve', function () {
     });
 });
 
-gulp.task('create-database', function () {
-    console.log('creating database ...');
+gulp.task('create-database', function() {
+    bar();
+    console.log(info('creating database ...'));
+    var sql = fs.readFileSync('db.sql').toString().split('--');
+    sql.push('end');
+    using(getSqlConnection(), function(conn) {
+        Promise.each(sql, function(query) {
+            if (query === 'end') {
+                pool.end();
+                console.log(success('database created'));
+                bar();
+                return;
+            }
+            return conn.queryAsync(query)
+                .then(function(msg) {
+                    console.log(info(`table ${query.split('(')[0].split(' ')[2]} created`));
+                });
+        }).catch(function(err) {
+            console.error(error(err));
+            pool.end();
+        });
+    }).catch(function(err) {
+        console.log(info('fuck'));
+    });
 });
 
-gulp.task('clean-database', function () {
+
+gulp.task('test-database-connection', function() {
+    console.log(info('testing connection ...'));
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'pokichat',
+        password: 'pokichat',
+        database: 'pokichat'
+    });
+    connection.connect(function(err) {
+        if (err) {
+            console.error(error('error connecting: ' + err.stack));
+            return;
+        }
+        bar();
+        console.log(success('connection success'));
+        console.log(success('connected as id ' + connection.threadId));
+        bar();
+        connection.end();
+    });
+});
+
+gulp.task('clean-database', function() {
     console.log('cleaning database ...');
 });
 
-gulp.task('seed-database', function () {
+gulp.task('seed-database', function() {
     console.log('seeding database ...');
 });
+
+function bar() {
+    console.log(warn('============================================='));
+}

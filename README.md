@@ -17,6 +17,17 @@ chat application for distributed system course
 5. to use intellisense if your editor support
 <br> ``` > typings install``` 
 
+6. create database name "pokichat" and create user "pokichat" with password "pokichat"
+
+7. to test database connection<br>
+``` > gulp test-database-connection ```
+
+8. to create database <br>
+``` > gulp create-database```
+
+9. learn about nodejs bluebirdjs expressjs (if you're doing the server) and ejs if you're doing the frontend
+   <br> and learn about **socket.io** weather you do whatever end 
+
 ## TO USE GULP
 
 1. to start server<br>```> gulp serve``` 
