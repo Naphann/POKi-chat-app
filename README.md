@@ -7,35 +7,58 @@ chat application for distributed system course
 1. install node
 
 2. to install dependencies
-<br> ``` > npm install```
+```bash
+ > npm install
+ ```
 
-3. if you ever intalled gulp globally and it is outdated remove it first by<br> ```> npm uninstall --global gulp```  
+3. if you ever intalled gulp globally and it is outdated remove it first by
+```bash
+> npm uninstall --global gulp
+```  
 
 4. to install typings and gulp
-<br> ``` > npm install -g typings gulp-cli```
+```bash
+ > npm install -g typings gulp-cli
+ ```
 
 5. to use intellisense if your editor support
-<br> ``` > typings install``` 
+```bash
+ > typings install
+ ``` 
 
 6. create database name "pokichat" and create user "pokichat" with password "pokichat"
 
-7. to test database connection<br>
-``` > gulp test-database-connection ```
+7. to test database connection
+```bash
+ > gulp test-database-connection 
+```
 
-8. to create database <br>
-``` > gulp create-database```
+8. to create database
+```bash
+ > gulp create-database
+```
 
-9. seed the database <br>
-``` > gulp seed-database```
+9. seed the database
+```bash
+ > gulp seed-database
+```
 
-10. to create user <br> 
-``` > node genuser.js --username=<username> --password=<password>```
+10. to create user
+```bash
+ > node genuser.js --username=<username> --password=<password>
+```
 
 10. learn about nodejs bluebirdjs expressjs (if you're doing the server) and ejs if you're doing the frontend
    <br> and learn about **socket.io** weather you do whatever end 
 
 ## TO USE GULP
 
-1. to start server<br>```> gulp serve``` 
+1. to start server
+```bash
+> gulp serve
+``` 
 
-2. to watch sass file and compile to css<br>```> gulp sass-watch```
+2. to watch sass file and compile to css
+```bash
+> gulp sass-watch
+```
