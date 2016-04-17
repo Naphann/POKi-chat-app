@@ -8,44 +8,44 @@ chat application for distributed system course
 
 2. to install dependencies
 ```bash
- > npm install
+npm install
  ```
 
 3. if you ever intalled gulp globally and it is outdated remove it first by
 ```bash
-> npm uninstall --global gulp
+npm uninstall --global gulp
 ```  
 
 4. to install typings and gulp
 ```bash
- > npm install -g typings gulp-cli
+npm install -g typings gulp-cli
  ```
 
 5. to use intellisense if your editor support
 ```bash
- > typings install
+typings install
  ``` 
 
 6. create database name "pokichat" and create user "pokichat" with password "pokichat"
 
 7. to test database connection
 ```bash
- > gulp test-database-connection 
+gulp test-database-connection 
 ```
 
 8. to create database
 ```bash
- > gulp create-database
+gulp create-database
 ```
 
 9. seed the database
 ```bash
- > gulp seed-database
+gulp seed-database
 ```
 
 10. to create user
 ```bash
- > node genuser.js --username=<username> --password=<password>
+node genuser.js --username=<username> --password=<password>
 ```
 
 10. learn about nodejs bluebirdjs expressjs (if you're doing the server) and ejs if you're doing the frontend
@@ -55,10 +55,10 @@ chat application for distributed system course
 
 1. to start server
 ```bash
-> gulp serve
+gulp serve
 ``` 
 
 2. to watch sass file and compile to css
 ```bash
-> gulp sass-watch
+gulp sass-watch
 ```
