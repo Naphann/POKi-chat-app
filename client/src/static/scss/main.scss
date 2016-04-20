@@ -1,0 +1,21 @@
+@import "bootstrap/bootstrap";
+
+.poki-nav.navbar-nav{
+    float: none;
+    li{
+        width: 25%;
+        font-size: x-large;
+        text-align: center;
+        a {
+            &:hover {
+                color: $navbar-default-link-hover-color;
+                background-color:  darken($brand-primary, 10%);
+             }
+            line-height: 100px;
+            height: 100px;
+            padding-top: 0;
+        }
+    }
+    
+}
+

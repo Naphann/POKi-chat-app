@@ -1,0 +1,34 @@
+{
+  "name": "dist-sys-project",
+  "version": "0.0.1",
+  "description": "chat application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Naphann/POKi-chat-app.git"
+  },
+  "devDependencies": {
+    "cli-color": "^1.1.0",
+    "gulp": "^3.9.1",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-nodemon": "^2.0.6",
+    "gulp-sass": "^2.2.0",
+    "gulp-typescript": "^2.13.0",
+    "minimist": "^1.2.0",
+    "nodemon": "^1.9.1"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.3.4",
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "gulp-typescript": "^2.13.0",
+    "hbs": "^4.0.0",
+    "lodash": "^4.11.1",
+    "mysql": "^2.10.2",
+    "socket.io": "^1.4.5"
+  }
+}
