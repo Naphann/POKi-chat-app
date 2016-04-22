@@ -7,6 +7,7 @@
   <script src="../static/lib/vue/vue.js"></script>
   <script src="../main.js"></script>
   <script src="../static/js/joined-room.js"></script>
+  <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="../static/css/main.css">
   <link rel="stylesheet" type="text/css" href="../static/css/joined-room.css">
 <body>
@@ -14,16 +15,18 @@
         <my-navbar></my-navbar>
     </div>
     <div class="page-header" style="text-align: center;">
-        <h1 id="d"> 
+        <h1 id="page-tite"> 
            <span  class="label label-me"> 
-             Joined Room
+            <a href="./joined-room.html"> Joined Room </a>
            </span>
         </h1>
     </div>
    <div class="room-list" id="joined-list">
         <div class="row well well-lg" v-for="item in items">
             <div class="col-sm-1"><span class="glyphicon glyphicon-heart"></span></div>
-            <div class="col-sm-8"><a href="#">{{ item.name }}</a></div>
+            <div class="col-sm-8">
+                <a href="./chat-room.html?room={{ item.name }}">{{ item.name }}</a>
+            </div>
             <div class="col-sm-3"><span class="new-msg">{{ item.new_msg }}</span></div>
         </div>
    </div>

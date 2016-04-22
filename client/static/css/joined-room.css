@@ -1,16 +1,18 @@
 .label-me{
     background-color:  olivedrab;
-    font-size: 80px;
 }
-a {
+.label{
+    color: white;
+}
+.room-list a {
     color: dodgerblue;
     text-decoration: none;
 }
-a:hover{
+.room-list a:hover{
     color:  navy;
     text-decoration: none;
 }
-a:focus{
+.room-list a:focus{
     color:   royalblue;
     text-decoration: none;
 }

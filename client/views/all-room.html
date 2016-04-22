@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Add Room</title>
+  <title>All Room</title>
   <script src="../static/lib/jquery/dist/jquery.min.js"></script>
   <script src="../static/lib/vue/vue.js"></script>
   <script src="../main.js"></script>
   <script src="../static/js/all-room.js"></script>
+  <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="../static/css/main.css">
   <link rel="stylesheet" type="text/css" href="../static/css/all-room.css">
 <body>
@@ -14,21 +15,22 @@
         <my-navbar></my-navbar>
     </div>
     <div class="page-header" style="text-align: center;">
-        <h1 id="d"> 
+        <h1 id="page-tite"> 
            <span  class="label label-me"> 
-             Add Room
+             <a href="./all-room.html"> All Room </a>
            </span>
         </h1>
     </div>
-    <div class="new-room-box" id="new-room-box">
-        <div class="row well well-lg">
+    <div class="new-room-box" id="add-room-box">
+        <div class="row well well-lg form-group">
             <div class="col-sm-1"><span class="glyphicon glyphicon-plus"></span></div>
-            <div class="col-sm-8">
-                <input type="text" class="new-room-name" placeholder="New room name"></input>
+            <div class="col-sm-9">
+                <input type="text" class="form-control new-room-name" 
+                placeholder=" room name" v-model="newRoomInput" v-on:keyup.enter="addRoom"> 
             </div>
-            <div class="col-sm-3">
-                <button class="btn btn-success">
-                    <span class="new-btn">New</span>   
+            <div class="col-sm-2">
+                <button class="btn btn-success" v-on:click="addRoom">
+                    <span class="new-btn">Create</span>   
                 </button>
             </div>
         </div>
@@ -36,8 +38,8 @@
     <div class="room-list" id="all-list">
         <div class="row well well-lg" v-for="item in items">
             <div class="col-sm-1"><span class="glyphicon glyphicon-star"></span></div>
-            <div class="col-sm-8"><a href="#">{{ item.name }}</a></div>
-            <div class="col-sm-3">
+            <div class="col-sm-9"><a href="#">{{ item.name }}</a></div>
+            <div class="col-sm-2">
                 <button class="btn btn-warning">
                     <span class="join-btn">Join</span>   
                 </button>
