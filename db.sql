@@ -19,7 +19,7 @@ create table message(
     content text,
     sender_id int not null,
     room_id int not null,
-    time datetime not null,
+    time timestamp not null,
     primary key (message_id),
     foreign key (sender_id) references user (user_id),
     foreign key (room_id) references room (room_id)

@@ -48,7 +48,7 @@ gulp seed-database
 node genuser.js --username=<username> --password=<password>
 ```
 
-10. learn about nodejs bluebirdjs expressjs (if you're doing the server) and ejs if you're doing the frontend
+11. learn about nodejs bluebirdjs expressjs (if you're doing the server) and ejs if you're doing the frontend
    <br> and learn about **socket.io** weather you do whatever end 
 
 ## TO USE GULP

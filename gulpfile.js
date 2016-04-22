@@ -5,7 +5,6 @@ var Promise = require('bluebird');
 var using = Promise.using;
 var clc = require('cli-color');
 var fs = require('fs');
-var _ = require('lodash');
 
 var error = clc.red.bold;
 var warn = clc.yellow;
@@ -30,17 +29,17 @@ function getSqlConnection() {
     });
 }
 
-gulp.task('sass', function() {
+gulp.task('sass', function () {
     return gulp.src('./src/static/scss/*.scss')
         .pipe($.sass({ outputStyle: 'compressed' }).on('error', $.sass.logError))
         .pipe(gulp.dest('./src/static/css'));
 });
 
-gulp.task('sass-watch', function() {
+gulp.task('sass-watch', function () {
     gulp.watch('./src/static/scss/*.scss', ['sass']);
 });
 
-gulp.task('serve', function() {
+gulp.task('serve', function () {
     $.nodemon({
         script: 'app.js',
         ext: 'js html',
@@ -48,13 +47,13 @@ gulp.task('serve', function() {
     });
 });
 
-gulp.task('create-database', function() {
+gulp.task('create-database', function () {
     bar();
     console.log(info('creating database ...'));
     var sql = fs.readFileSync('db.sql').toString().split('--');
     sql.push('end');
-    using(getSqlConnection(), function(conn) {
-        Promise.each(sql, function(query) {
+    using(getSqlConnection(), function (conn) {
+        Promise.each(sql, function (query) {
             if (query === 'end') {
                 pool.end();
                 console.log(success('database created'));
@@ -62,21 +61,21 @@ gulp.task('create-database', function() {
                 return;
             }
             return conn.queryAsync(query)
-                .then(function(msg) {
+                .then(function (msg) {
                     // console.dir(msg);
                     console.log(info(`table ${query.split('(')[0].split(' ')[2]} created`));
                 });
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error(error(err));
             pool.end();
         });
-    }).catch(function(err) {
+    }).catch(function (err) {
         console.log(error('wtf something went wrong.'));
     });
 });
 
 
-gulp.task('test-database-connection', function() {
+gulp.task('test-database-connection', function () {
     console.log(info('testing connection ...'));
     var connection = mysql.createConnection({
         host: 'localhost',
@@ -84,7 +83,7 @@ gulp.task('test-database-connection', function() {
         password: 'pokichat',
         database: 'pokichat'
     });
-    connection.connect(function(err) {
+    connection.connect(function (err) {
         if (err) {
             console.error(error('error connecting: ' + err.stack));
             return;
@@ -97,32 +96,32 @@ gulp.task('test-database-connection', function() {
     });
 });
 
-gulp.task('clean-database', function() {
+gulp.task('clean-database', function () {
     console.log(info('cleaning database ...'));
 });
 
-gulp.task('seed-database', function() {
+gulp.task('seed-database', function () {
     bar();
     console.log(info('seeding database ...'));
     var buffer = fs.readFileSync('seeder.json', 'utf8');
     var sql = JSON.parse(buffer);
-    using(getSqlConnection(), function(conn) {
-        Promise.each(sql.users, function(query, index) {
-            if (index === sql.users.length - 1) {
-                pool.end();
-                console.log(success('database seeded.'));
-                bar();
-                return;
-            }
+    using(getSqlConnection(), function (conn) {
+        Promise.each(sql.users, function (query, index) {
             return conn.queryAsync('insert into user set ?', query)
                 .then(function (msg) {
                     console.log(info(`user ${query.username} created`));
+                    if (index === sql.users.length - 1) {
+                        pool.end();
+                        console.log(success('database seeded.'));
+                        bar();
+                        return;
+                    }
                 });
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error(error(err));
             pool.end();
         });
-    }).catch(function(err) {
+    }).catch(function (err) {
         console.log(error('wtf something went wrong.'));
     });
 });
