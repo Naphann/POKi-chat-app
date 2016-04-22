@@ -1,0 +1,22 @@
+.label-me{
+    background-color:  olivedrab;
+    font-size: 80px;
+}
+a {
+    color: dodgerblue;
+    text-decoration: none;
+}
+a:hover{
+    color:  navy;
+    text-decoration: none;
+}
+a:focus{
+    color:   royalblue;
+    text-decoration: none;
+}
+.row{
+    font-size: 50px;
+}
+.new-msg{
+    font-size: 30px;
+}
