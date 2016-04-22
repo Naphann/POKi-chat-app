@@ -5,13 +5,15 @@ var Promise = require('bluebird');
 var using = Promise.using;
 var clc = require('cli-color');
 var fs = require('fs');
-
+var db = require('./src/config/database-promise');
+var bcrypt = require('bcrypt-nodejs');
 var error = clc.red.bold;
 var warn = clc.yellow;
 var info = clc.cyanBright;
 var success = clc.green;
 
 Promise.promisifyAll(fs);
+Promise.promisifyAll(bcrypt);
 Promise.promisifyAll(require('mysql/lib/Connection').prototype);
 Promise.promisifyAll(require('mysql/lib/Pool').prototype);
 
@@ -105,24 +107,18 @@ gulp.task('seed-database', function () {
     console.log(info('seeding database ...'));
     var buffer = fs.readFileSync('seeder.json', 'utf8');
     var sql = JSON.parse(buffer);
-    using(getSqlConnection(), function (conn) {
-        Promise.each(sql.users, function (query, index) {
-            return conn.queryAsync('insert into user set ?', query)
-                .then(function (msg) {
-                    console.log(info(`user ${query.username} created`));
-                    if (index === sql.users.length - 1) {
-                        pool.end();
-                        console.log(success('database seeded.'));
-                        bar();
-                        return;
-                    }
-                });
-        }).catch(function (err) {
-            console.error(error(err));
-            pool.end();
-        });
-    }).catch(function (err) {
-        console.log(error('wtf something went wrong.'));
+    sql.users.forEach((user, index) => {
+        bcrypt.hashAsync(user.password, null, null)
+            .then((hash) => {
+                db.createUser(user.username, user.displayname, hash)
+                    .then(() => {
+                        if (index === sql.users.length - 1) {
+                            console.log(success('done seeding ...'));
+                            bar();
+                            process.exit(0);
+                        }
+                    });
+            })
     });
 });
 

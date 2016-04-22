@@ -1,7 +1,12 @@
 var Promise = require('bluebird');
 var mysql = require('mysql');
-var moment = require('moment');
 var using = Promise.using;
+
+var clc = require('cli-color');
+var error = clc.red.bold;
+var warn = clc.yellow;
+var info = clc.cyanBright;
+var success = clc.green;
 
 Promise.promisifyAll(require('mysql/lib/Connection').prototype);
 Promise.promisifyAll(require('mysql/lib/Pool').prototype);
@@ -42,12 +47,13 @@ function createUser(username, displayname, password) {
         'displayname': displayname,
         'password': password
     };
-    insertSql('user', userObj).then((data) => {
-        console.log('finish');
-        console.log(`this is the insert id ${data}`);
-    }).catch((err) => {
-        console.log(`error: ${err}`);
-    })
+    return insertSql('user', userObj)
+        .then((data) => {
+            console.log(info(`user ${username} created with user_id = ${data}`));
+            // console.log(info(`this is the insert id ${data}`));
+        }).catch((err) => {
+            console.error(`error: ${err}`);
+        })
 }
 
 function createRoom(roomname) {
@@ -76,10 +82,19 @@ function createMessage(roomId, senderId, content) {
         });
 }
 
-function joinRoom() {
-    
+function joinRoom(userId, roomId) {
+    var obj = {
+        user_id: userId,
+        room_id: roomId
+    };
+    rawSql('SELECT message_id FROM message WHERE room_id = ? ORDER BY message_id DESC LIMIT 1', ['message'])
+        .then((results) => {
+            return
+        })
+
 }
 
 module.exports.getSqlConnection = getSqlConnection;
 module.exports.createUser = createUser;
 module.exports.rawSql = rawSql;
+module.exports.pool = pool;
