@@ -1,4 +1,4 @@
-function login() {
+$('form#login-form').submit(function() {
     $.post({
         url: POKi.getLocation() + '/login',
         type: 'POST',
@@ -11,4 +11,5 @@ function login() {
             console.log(error);
         }
     });
-}
+    return false;
+});
