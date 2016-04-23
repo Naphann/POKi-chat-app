@@ -1,0 +1,21 @@
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="../static/lib/jquery/dist/jquery.min.js"></script>
+<script src="../static/js/utils.js"></script>
+<script>
+    loadScript("../static/js/POKi.js", () => { // Ensure POKi core is loaded BEFORE login.js.
+        loadScript("../static/js/login.js");
+    });
+</script>
+<div style="position:absolute;top:35%;left:45%">
+    <h1>POKi</h1>
+    <form id="login-form">
+        <span>
+            User: <input type="text" name="user" value="Paul">
+        </span>
+        <br>
+        <span>
+            Pass: <input type="text" name="pass" value="Paul">
+        </span>
+        <button type="button" id="login-button" onclick="login();">Login</button>
+    </form>
+</div>
