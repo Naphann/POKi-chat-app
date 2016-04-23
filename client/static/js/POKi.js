@@ -124,11 +124,24 @@ POKi.isDisconnected = function() {
     });
     return !connected;
 };
+POKi.loggedIn = function() {
+    $.ajax({
+        type: "GET",
+        url : POKi.getLocation() + "/login/check",
+        crossDomain: true,
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(response) {
+            console.log(response);
+        },
+    });
+}
 
 $(window).load(function() {
     POKi();
     POKi.init([
-        "localhost:3001",
         "localhost:3000",
+        "localhost:3001",
     ]);
 });

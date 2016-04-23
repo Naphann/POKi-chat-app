@@ -4,6 +4,10 @@ $('form#login-form').submit(function() {
         type: 'POST',
         data: $("form#login-form").serializeArray(),
         dataType : 'json',
+        crossDomain: true,
+        xhrFields: {
+            withCredentials: true
+        },
         success: function(response) {
             console.log(response);
         },

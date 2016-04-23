@@ -10,31 +10,33 @@ var mysql = require('mysql');
 var pool = require('./src/config/database-promise.js');
 var using = require('bluebird').using;
 var Promise = require('bluebird');
+var bcrypt = require('bcrypt-nodejs');
+var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
 
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'src/views'));
+app.use(cookieParser());
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 2592000000 }, resave: true, saveUninitialized: true }))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('src/static/css'));
 app.use(express.static('src/static/js'));
 app.use(express.static('src/static/lib'));
 app.use(express.static('src/views'));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use((req, res, next) => {
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
     res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+// Middlewares
+var POKiAuth = require('./middlewares/authentication.js')(passport, LocalStrategy, Promise, using, pool, bcrypt);
 
 app.get('/', (req, res) => {
     using(pool.getSqlConnection(), (conn) => {
@@ -42,10 +44,10 @@ app.get('/', (req, res) => {
             .then(function (results) {
                 return Promise.map(results, (user, idx) => {
                     user.index = idx+1;
-                    return user;            
+                    return user;
                 });
             })
-            .then((users) => {               
+            .then((users) => {
                 var data = { users: users, arr: [{x:1},{x:2},{x:3}] };
                 console.log(data);
                 res.render('main', data);
@@ -57,10 +59,14 @@ app.get('/test', (req, res) => {
     res.end(`<h1>hello world</h1>`);
 });
 
-app.post('/login', (req,res) => {
-    console.log(req.body.user,"try to login.");
-    res.send(req.body);
-});
+// app.post('/login', (req,res) => {
+//     console.log(req.body.user,"try to login.");
+//     res.send(req.body);
+// });
+
+POKiAuth.init(passport,LocalStrategy);
+app.get('/login/check', POKiAuth.loggedIn);
+app.post('/login', POKiAuth.authenticate);
 
 io.on('connection', function (socket) {
     socket.on('ack', function () {
