@@ -9,15 +9,32 @@ html, body {
     text-align: center;
     height: 100%;
 }
-.cell-table {
-    display: table-cell;
-    vertical-align: middle;
+.loader {
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    bottom: 20%;
+}
+#login-modal > .modal-dialog {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
+}
+#logo {
+    margin-top: 15%;
 }
 
-#spinner {
+.fa {
     color: red;
 }
-#down-status {
+.status {
     color: red;
+    font-size: 22px;
     font-weight: bold;
+}
+.left {
+    float: left;
 }

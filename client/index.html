@@ -9,34 +9,63 @@
   <script src="./socket.io-client-master/socket.io.js"></script>
   <script src="./static/lib/vue/vue.js"></script>
   <script src="./static/lib/vue/vue-router.js"></script>
-  <script src="./main.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="./static/fonts/icons.css">
-  <link rel="stylesheet" type="text/css" href="./static/css/bootstrap.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="./static/css/main.css">
 
   <script src="./static/js/utils.js"></script>
 
   <link id="welcome-style" rel="stylesheet" href="./static/css/welcome.css">
-  <script src="./static/js/welcome.js"></script>
+  <script src=""></script>
   <script>
-    loadScript("./static/js/POKi.js",
-        loadScript("./static/js/POKiController.js")
+    // App
+    loadScript("./static/js/POKiController.js", // <<- Lastest
+    loadScript("./main.js",
+        // Core
+        loadScript("./static/js/POKi.js",
+            // Page
+            loadScript("./static/js/welcome.js",
+            loadScript("./static/js/login.js")
+            )
+        )
+    )
     );
   </script>
 
   <body style="background-color: cornsilk;">
     <div id="container" class="container container-table">
       <router-view>
-        <div class="cell-table" style="padding-top: 200px">
-          <img id="logo" src="./static/img/poki.png" class="img-sm" alt="POKI Picture">
-          <br>
-          <i id="spinner" class="fa fa-spinner fa-spin fa-fw fa-3x" aria-hidden="true"></i>
-          <span id="down-status" style="display:none;">Unfortunately, Server is down.</span>
-        </div>
       </router-view>
     </div>
-    
+    <div id="login-modal" class="modal fade" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form v-on:submit="send($event,this.mode)">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" name="username" class="form-control" placeholder="Username">
+                        </div>
+                        <div id="displayName" class="form-group" style="display:none;">
+                            <label>Displayname</label>
+                            <input type="text" name="displayname" class="form-control" placeholder="Displayname" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="toggleButton" type="button" class="btn btn-primary left" v-on:click="toggleMode(this.mode)">{{ toggleButton }}</button>
+                        <button type="submit" class="btn btn-success">{{ submitButton }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
   </body>
 
 </html>

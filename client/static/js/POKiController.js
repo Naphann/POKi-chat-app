@@ -1,12 +1,12 @@
 $(window).load(function() {
+    router.go('/');
     POKi();
     POKi.init([
         "localhost:3000",
         "localhost:3001",
     ]).onReady(function() {
-        console.log("initialize completed..");
-        router.go('/login')
+        setTimeout(Welcome.serverConnect,700);
     },function() {
-        welcome.serverDown();
+        Welcome.serverDown();
     });
 });
