@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title> POKi Chat&reg;</title>
@@ -7,6 +8,8 @@
   <script src="./static/lib/jquery/dist/jquery.min.js"></script>
   <script src="./socket.io-client-master/socket.io.js"></script>
   <script src="./static/lib/vue/vue.js"></script>
+  <script src="./static/lib/vue/vue-router.js"></script>
+  <script src="./main.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="./static/fonts/icons.css">
   <link rel="stylesheet" type="text/css" href="./static/css/bootstrap.css">
@@ -21,7 +24,19 @@
         loadScript("./static/js/POKiController.js")
     );
   </script>
-<body style="background-color: cornsilk;">
-    <div id="container" class="container container-table"></div>
-</body>
+
+  <body style="background-color: cornsilk;">
+    <div id="container" class="container container-table">
+      <router-view>
+        <div class="cell-table" style="padding-top: 200px">
+          <img id="logo" src="./static/img/poki.png" class="img-sm" alt="POKI Picture">
+          <br>
+          <i id="spinner" class="fa fa-spinner fa-spin fa-fw fa-3x" aria-hidden="true"></i>
+          <span id="down-status" style="display:none;">Unfortunately, Server is down.</span>
+        </div>
+      </router-view>
+    </div>
+    
+  </body>
+
 </html>

@@ -26,5 +26,5 @@ welcome.down = function() {
 }
 
 $(window).load(function(){
-    welcome.up();
+    // welcome.up();
 });
