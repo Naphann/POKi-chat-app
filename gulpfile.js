@@ -7,6 +7,7 @@ var clc = require('cli-color');
 var fs = require('fs');
 var db = require('./src/config/database-promise');
 var bcrypt = require('bcrypt-nodejs');
+var argv = require('yargs').argv;
 var error = clc.red.bold;
 var warn = clc.yellow;
 var info = clc.cyanBright;
@@ -45,7 +46,11 @@ gulp.task('serve', function () {
     $.nodemon({
         script: 'app.js',
         ext: 'js html',
-        env: { 'NODE_ENV': 'development' }
+        env: {
+            'NODE_ENV': 'development',
+            'PORT': (argv.port ? argv.port : 3000),
+            'TYPE': (argv.master ? 'master' : 'slave')
+        }
     });
 });
 

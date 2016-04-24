@@ -11,7 +11,6 @@ POKi.init = function(serverList) {
     this.connecting = [];
     this.serverList.forEach(function(server) {
         var socket = io("http://" + server);
-        socket.isMaster = false;
         socket.location = "http://" + server;
 
         socket.on('connect_error', function() {
@@ -36,6 +35,8 @@ POKi.init = function(serverList) {
         });
 
         socket.on('slave', function(response) {
+            socket.isMaster = false;
+            console.log("Found Slave @",server);
             socket.close();
         });
         POKi.connecting.push(socket);

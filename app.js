@@ -15,7 +15,8 @@ var passport = require('passport'), LocalStrategy = require('passport-local').St
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT);
+app.set('type', process.env.TYPE); // SERVER type master/slave
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'src/views'));
 app.use(cookieParser());
@@ -70,9 +71,9 @@ app.post('/login', POKiAuth.authenticate);
 
 io.on('connection', function (socket) {
     socket.on('ack', function () {
-        socket.emit('master',{ msg : 'Welcome to POKi Chat Application.'});
+        socket.emit(app.get('type'));
     });
 });
 
 http.listen(app.get('port'));
-console.log(`magic happens at port ${app.get('port')}`);
+console.log(`${app.get('type')} happens at port ${app.get('port')}`);
