@@ -1,6 +1,6 @@
 var Welcome = Vue.extend({
     template:
-        '<img id="logo" src="./static/img/poki.png" class="img-sm" alt="POKI Picture">\
+        '<img id="logo" src="./static/img/poki.png" alt="POKI Picture">\
         <div class="loader">\
             <i id="spinner" class="fa fa-spinner fa-spin fa-fw fa-3x" aria-hidden="true"></i>\
             <span id="down-status" class="status" style="display:none;">Unfortunately, Server is down.</span>\
