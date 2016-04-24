@@ -112,19 +112,44 @@ gulp.task('seed-database', function () {
     console.log(info('seeding database ...'));
     var buffer = fs.readFileSync('seeder.json', 'utf8');
     var sql = JSON.parse(buffer);
-    sql.users.forEach((user, index) => {
-        bcrypt.hashAsync(user.password, null, null)
+
+    var createUserPromise = function (user) {
+        return bcrypt.hashAsync(user.password, null, null)
             .then((hash) => {
-                db.createUser(user.username, user.displayname, hash)
-                    .then(() => {
-                        if (index === sql.users.length - 1) {
-                            console.log(success('done seeding ...'));
-                            bar();
-                            process.exit(0);
-                        }
-                    });
+                return db.createUser(user.username, user.displayname, hash);
             })
-    });
+    };
+
+    var createRoomPromise = function (room) {
+        return db.createRoom(room.roomname);
+    }
+
+    var createUserRoomPromise = function (userRoom) {
+        return db.subscribeRoom(userRoom.user_id, userRoom.room_id);
+    }
+
+    var createMessagePromise = function (msg) {
+        return db.createMessage(msg.room_id, msg.sender_id, msg.content);
+    }
+    
+    var results = Promise.all(sql.users.map(createUserPromise))
+        .then(() => {
+            return Promise.all(sql.rooms.map(createRoomPromise));
+        })
+        .then(() => {
+            console.log(info('rooms created'));
+            return Promise.all(sql.messages.map(createMessagePromise));
+        })
+        .then(() => {
+            console.log(info('messages created'));
+            return Promise.all(sql.user_room_without_last_id.map(createUserRoomPromise));
+        })
+        .then(() => {
+            console.log(info('user_room created'));
+            console.log(success('done seeding database ...'));
+            bar();
+            process.exit(0);
+        });
 });
 
 function bar() {

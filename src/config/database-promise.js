@@ -82,19 +82,25 @@ function createMessage(roomId, senderId, content) {
         });
 }
 
-function joinRoom(userId, roomId) {
+function subscribeRoom(userId, roomId) {
     var obj = {
         user_id: userId,
         room_id: roomId
     };
-    rawSql('SELECT message_id FROM message WHERE room_id = ? ORDER BY message_id DESC LIMIT 1', ['message'])
+    return rawSql('SELECT message_id FROM message WHERE room_id = ? ORDER BY message_id DESC LIMIT 1', [roomId])
         .then((results) => {
-            return
-        })
-
+            // console.log(results);
+            obj.last_message_id = results[0].message_id;
+            return insertSql('user_room', obj);           
+        });
 }
 
-module.exports.getSqlConnection = getSqlConnection;
-module.exports.createUser = createUser;
-module.exports.rawSql = rawSql;
-module.exports.pool = pool;
+module.exports = {
+    getSqlConnection: getSqlConnection,
+    createMessage: createMessage,
+    createRoom: createRoom,
+    createUser: createUser,
+    rawSql: rawSql,
+    pool: pool,
+    subscribeRoom: subscribeRoom
+};

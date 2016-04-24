@@ -30,5 +30,64 @@
             "displayname": "inging",
             "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
         }
+    ],
+    "rooms": [
+        {
+            "roomname": "socket.io"
+        },
+        {
+            "roomname": "mysql"
+        },
+        {
+            "roomname": "dist-sys"
+        }
+    ],
+    "user_room": [
+        {
+            "user_id": "1",
+            "room_id": "1",
+            "last_message_id": "3"           
+        },
+        {
+            "user_id": "2",
+            "room_id": "1",
+            "last_message_id": "3"           
+        },
+        {
+            "user_id": "3",
+            "room_id": "1",
+            "last_message_id": "3"           
+        }
+    ],
+    "user_room_without_last_id": [
+        {
+            "user_id": "1",
+            "room_id": "1"
+        },
+        {
+            "user_id": "2",
+            "room_id": "1"
+        },
+        {
+            "user_id": "3",
+            "room_id": "1"
+        }
+    ],
+    "messages": [
+        {
+            "content": "message 1",
+            "sender_id": "1",
+            "room_id": "1"
+        },
+        {
+            "content": "message 2",
+            "sender_id": "2",
+            "room_id": "1"
+        },
+        {
+            "content": "message 3",
+            "sender_id": "3",
+            "room_id": "1"
+        }
     ]
 }
