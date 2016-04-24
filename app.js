@@ -7,7 +7,7 @@ var http = require('http').createServer(app);
 var bodyParser = require('body-parser');
 var io = require('socket.io')(http);
 var mysql = require('mysql');
-var pool = require('./src/config/database-promise.js');
+var db = require('./src/config/database-promise.js');
 var using = require('bluebird').using;
 var Promise = require('bluebird');
 var bcrypt = require('bcrypt-nodejs');
@@ -37,23 +37,19 @@ app.use((req, res, next) => {
     next();
 });
 // Middlewares
-var POKiAuth = require('./middlewares/authentication.js')(passport, LocalStrategy, Promise, using, pool, bcrypt);
+var POKiAuth = require('./middlewares/authentication.js')(passport, LocalStrategy, Promise, using, db, bcrypt);
 
 app.get('/', (req, res) => {
-    using(pool.getSqlConnection(), (conn) => {
-        conn.queryAsync('SELECT * FROM USER')
-            .then(function (results) {
-                return Promise.map(results, (user, idx) => {
-                    user.index = idx+1;
-                    return user;
-                });
-            })
-            .then((users) => {
-                var data = { users: users, arr: [{x:1},{x:2},{x:3}] };
-                console.log(data);
-                res.render('main', data);
-            });
-    });
+    db.rawSql('SELECT * FROM USER')
+        .map((user, idx) => {
+            user.index = idx + 1;
+            return user;
+        })
+        .then((users) => {
+            var data = { users: users };
+            console.log(data);
+            res.render('main', data);
+        });
 });
 
 app.get('/test', (req, res) => {
@@ -72,6 +68,30 @@ app.post('/login', POKiAuth.authenticate);
 io.on('connection', function (socket) {
     socket.on('ack', function () {
         socket.emit(app.get('type'));
+    });
+
+    socket.on('message', (msg) => {
+        console.log(`receive message: '${msg.content}' to room: '${msg.room}' by '${msg.sender}'`);
+        io.to(msg.room).emit('message', msg);
+    });
+
+    socket.on('join room', (room, oldRoom) => {
+        console.log('join event fired');
+        // socket.leave(oldRoom);
+        socket.join(room);
+    });
+
+    socket.on('leave room', (room) => {
+        console.log('leave room');
+        socket.leave(room);
+    });
+    
+    socket.on('subscribe room', (room, user) => {
+        console.log('subscribe room in db');
+    });
+
+    socket.on('exit group', (room) => {
+        console.log('exit group');
     });
 });
 
