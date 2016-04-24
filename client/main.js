@@ -10,9 +10,11 @@ $(document).ready(function(){
             '</nav>'
     });
     Vue.component('my-navbar', MyNav);
-    new Vue({
-        el: '#my-nav'
-    });
+    if( $(document).find('#my-nav').length > 0){
+        new Vue({
+            el: '#my-nav'
+        });
+    }
     
 
 });
