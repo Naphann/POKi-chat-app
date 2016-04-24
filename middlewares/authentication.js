@@ -6,7 +6,7 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
 
         passport.deserializeUser(function(id, done) {
             using(pool.getSqlConnection(), (conn) => {
-                conn.queryAsync("SELECT * FROM user WHERE user_id='" + id + "'")
+                conn.queryAsync("SELECT * FROM user WHERE user_id=?",[id])
                 .then(function (results) {
                     return Promise.map(results, (user, idx) => {
                         user.index = idx+1;
@@ -26,7 +26,7 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
             (username, password, done) => {
                 var data;
                 using(pool.getSqlConnection(), (conn) => {
-                    conn.queryAsync("SELECT user_id, displayname, password FROM user WHERE username='" + username + "'")
+                    conn.queryAsync("SELECT user_id, displayname, password FROM user WHERE username=?",[username])
                     .then(function (results) {
                         return Promise.map(results, (user, idx) => {
                             user.index = idx+1;
