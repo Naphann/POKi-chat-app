@@ -1,7 +1,13 @@
-$(document).ready(function(){
+$(window).load(function() {
     var allList = new Vue({
-        el: '#all-list',
-        data: {
+        el: '#all-list'
+    });   
+    new Vue({
+        el: '#add-room-box'
+     });
+});
+
+allRoomData = {
             items: [
                 { name: 'SA Room'  },
                 { name: 'Dis Sys Room' },
@@ -10,24 +16,6 @@ $(document).ready(function(){
                 { name: 'CP40.5 Room' },
                 { name: 'SensorTech Room'  },
                 { name: 'Teacup Room'  }
-            ]
-        }
-    });
-    new Vue({
-        el: '#add-room-box',
-        data: {
+            ],
             newRoomInput: ''
-        },
-        methods: {
-            addRoom: function () {
-                var name = this.newRoomInput.trim()
-                if (name) {
-                    allList.items.unshift({ name: name })
-                    this.newRoomInput = ''
-                }
-            }
-        }
-     });
-     
-     
-});
+        };
