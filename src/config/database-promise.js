@@ -119,13 +119,35 @@ function getNewMessage(roomId, userId) {
         });
 }
 
+function readMessage(userId, roomId, messageId) {
+    var obj = {
+        last_message_id: messageId
+    }
+    return rawSql('UPDATE user_room SET ? WHERE user_id = ? AND room_id = ?',
+        [obj, userId, roomId])
+        .then(results => {
+            console.log(results);
+        });
+}
+
+function getAllRoom(userId) {
+    return rawSql('SELECT * FROM room WHERE room_id NOT IN (SELECT room_id FROM user_room WHERE user_id = ?)', [userId]);
+}
+
+function getJoinedRoom(userId) {
+    return rawSql('SELECT * FROM room WHERE room_id IN (SELECT room_id FROM user_room WHERE user_id = ?)', [userId]);
+}
+
 module.exports = {
     getSqlConnection: getSqlConnection,
     createMessage: createMessage,
     createRoom: createRoom,
     createUser: createUser,
     getNewMessage: getNewMessage,
+    getAllRoom: getAllRoom,
+    getJoinedRoom: getJoinedRoom,
     rawSql: rawSql,
+    readMessage: readMessage,
     pool: pool,
     subscribeRoom: subscribeRoom,
     unsubscribeRoom: unsubscribeRoom
