@@ -1,0 +1,23 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+.container {
+    display: table;
+    text-align: center;
+    height: 100%;
+}
+.cell-table {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#spinner {
+    color: red;
+}
+#down-status {
+    color: red;
+    font-weight: bold;
+}

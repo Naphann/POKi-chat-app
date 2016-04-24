@@ -2,24 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title> TEST</title>
+  <title> POKi Chat&reg;</title>
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
   <script src="./static/lib/jquery/dist/jquery.min.js"></script>
   <script src="./socket.io-client-master/socket.io.js"></script>
   <script src="./static/lib/vue/vue.js"></script>
-  <script src="./main.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="./static/fonts/icons.css">
   <link rel="stylesheet" type="text/css" href="./static/css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="./static/css/main.css">
+
+  <script src="./static/js/utils.js"></script>
+
+  <link id="welcome-style" rel="stylesheet" href="./static/css/welcome.css">
+  <script src="./static/js/welcome.js"></script>
+  <script>
+    loadScript("./static/js/POKi.js",
+        loadScript("./static/js/POKiController.js")
+    );
+  </script>
 <body style="background-color: cornsilk;">
-    <div style="text-align: center; position:absolute;left:40%">
-        <br><br><br>
-         <img src="./static/img/poki.png" class="img-sm" alt="POKI Picture">
-        <br><br><br>
-        <form action="./views/login.html">
-            <button type="submit" class="btn btn-info" style="font-size: 45px;">Login</button>
-        </form>
-        <br>
-        <a href="./views/joined-room.html" class="link">Goto App</a>
-    </div>
+    <div id="container" class="container container-table"></div>
 </body>
 </html>
