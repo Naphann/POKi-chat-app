@@ -135,7 +135,7 @@ function getAllRoom(userId) {
 }
 
 function getJoinedRoom(userId) {
-    return rawSql('SELECT * FROM room WHERE room_id IN (SELECT room_id FROM user_room WHERE user_id = ?)', [userId]);
+    return rawSql('SELECT * FROM room INNER JOIN user_room ON room.room_id = user_room.room_id WHERE user_id = ?', [userId]);
 }
 
 module.exports = {

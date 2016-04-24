@@ -117,22 +117,29 @@ io.on('connection', function (socket) {
         console.log('exit room');
         db.unsubscribeRoom(data.userId, data.roomId);
     });
-    
+
     socket.on('read', (data) => {
         db.readMessage(data.userId, data.roomId, data.messageId);
     });
-    
+
     socket.on('all-room', (data) => {
         db.getAllRoom(data.userId).then(results => {
             socket.emit('all-room', results);
         });
     });
-    
+
     socket.on('joined-room', (data) => {
         db.getJoinedRoom(data.userId).then(results => {
             socket.emit('joined-room', results);
         });
     });
+
+    socket.on('get unread', (data) => {
+        db.getNewMessage(data.userId, data.roomId)
+            .then(results => {
+                socket.emit('get unread', results);
+            });
+    })
 });
 
 
