@@ -7,6 +7,7 @@ function POKi() {
 // ############################################
 // initial - serverList ["url", "url", ...]
 POKi.init = function(serverList) {
+    this.endTest = 0;
     this.serverList = serverList;
     this.connecting = [];
     this.serverList.forEach(function(server) {
@@ -15,16 +16,18 @@ POKi.init = function(serverList) {
 
         socket.on('connect_error', function() {
             socket.close();
+            POKi.endTest++;
         });
 
         socket.on('connect', function() {
             socket.emit('ack');
             console.log("Connected to",server);
+            POKi.endTest++;
         });
 
         socket.on('disconnect', function() {
             if(socket.isMaster) {
-                POKi.refreshSlave();
+                POKi.retry();
             }
         });
 
@@ -41,6 +44,7 @@ POKi.init = function(serverList) {
         });
         POKi.connecting.push(socket);
     });
+    return this;
 };
 
 
@@ -48,40 +52,37 @@ POKi.init = function(serverList) {
 //                Utils Methods
 // ############################################
 // Refresh all disconnected server
+// Can be used with .onReady(success,fail)
 POKi.refreshAll = function() {
+    this.endTest = 0;
     this.connecting.forEach(function(socket) {
         if(!socket.connected)
             socket.connect();
     });
+    return this;
 };
 
-// Refresh slave server
-POKi.refreshSlave = function() {
-    console.log("Connecting to slave servers...");
-    this.connecting.forEach(function(socket) {
-        if(!socket.isMaster)
-            socket.connect();
-    });
-};
-
+// Use when master is disconnected.
 // Refresh by set retrying interval every 3 seconds for 10 times
-POKi.retry = function() {
+POKi.retry = function(success, fail) {
     var retryTime = 0,
-        retryInterval = setInterval(function () {
-            retryTime++;
-            if(!POKi.ready()) {
-                console.log("Connection lost. Retrying...",retryTime);
-                POKi.refreshAll();
-                if(retryTime >= 10) {
-                    console.log("Disconnected.");
-                    clearInterval(retryInterval);
-                }
-            }
-            else {
-                console.log("Server okay.");
+    retryInterval = setInterval(function () {
+        retryTime++;
+        console.log("Connection lost. Retrying...",retryTime);
+        POKi.refreshAll().onReady(()=> {
+            console.log("Server okay.");
+            clearInterval(retryInterval);
+            if(success != undefined)
+                success();
+        },() => {
+            if(retryTime >= 10) {
+                console.log("Disconnected.");
                 clearInterval(retryInterval);
+                if(fail != undefined)
+                    fail();
             }
-        }, 3000);
+        });
+    }, 3000);
 };
 
 // ############################################
@@ -116,7 +117,6 @@ POKi.status = function() {
 POKi.ready = function() {
     return (this.masterServer != undefined && this.masterServer.connected);
 };
-
 // TRUE - when disconnected to all server
 POKi.isDisconnected = function() {
     var connected = false;
@@ -125,18 +125,40 @@ POKi.isDisconnected = function() {
     });
     return !connected;
 };
+// TRUE - Logged In
 POKi.loggedIn = function() {
+    var flag = false;
     $.ajax({
         type: "GET",
+        async: false,
         url : POKi.getLocation() + "/login/check",
         crossDomain: true,
         xhrFields: {
             withCredentials: true
         },
         success: function(response) {
-            console.log(response);
+            flag = response;
         },
     });
+    return flag;
+}
+
+// ############################################
+//                Promise Methods
+// ############################################
+POKi.onReady = function(success, fail) {
+    this._checkInterval = setInterval(function() {
+        if(POKi.ready()) {
+            clearInterval(POKi._checkInterval);
+            if(success != undefined)
+                success();
+        }
+        else if(POKi.endTest == POKi.serverList.length && POKi.isDisconnected()){
+            clearInterval(POKi._checkInterval);
+            if(fail != undefined)
+                fail();
+        }
+    },100);
 }
 
 $(window).load(function() {
@@ -144,5 +166,9 @@ $(window).load(function() {
     POKi.init([
         "localhost:3000",
         "localhost:3001",
-    ]);
+    ]).onReady(function() {
+        console.log("initialize completed..");
+    },function() {
+        console.log("initialize failed..");
+    });
 });
