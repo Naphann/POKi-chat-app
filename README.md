@@ -68,3 +68,7 @@ gulp serve
 ```bash
 gulp sass-watch
 ```
+
+## Socket.io NOTES
+
+- all data sent for each event must be in **JSON format**.

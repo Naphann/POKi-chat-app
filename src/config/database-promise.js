@@ -91,7 +91,31 @@ function subscribeRoom(userId, roomId) {
         .then((results) => {
             // console.log(results);
             obj.last_message_id = results[0].message_id;
-            return insertSql('user_room', obj);           
+            return insertSql('user_room', obj);
+        });
+}
+
+function unsubscribeRoom(userId, roomId) {
+    return rawSql('DELETE FROM user_room WHERE user_id = ? AND room_id = ?', [userId, roomId])
+        .catch(err => {
+            console.error(`cannot unsubscribeRoom reason: ${err}`);
+        });
+}
+/***
+  **  use when user want to get old message ...
+***/
+function getOldMessage(roomId, limit, before) {
+
+}
+
+/*
+    use when there is all unread message in the room
+*/
+function getNewMessage(roomId, userId) {
+    return rawSql('SELECT last_message_id FROM user_room WHERE user_id = ? AND room_id = ?')
+        .then((results) => {
+            return rawSql('SELECT * FROM message WHERE room_id = ? AND message_id > ?',
+                [roomId, results[0].last_message_id]);
         });
 }
 
@@ -100,7 +124,9 @@ module.exports = {
     createMessage: createMessage,
     createRoom: createRoom,
     createUser: createUser,
+    getNewMessage: getNewMessage,
     rawSql: rawSql,
     pool: pool,
-    subscribeRoom: subscribeRoom
+    subscribeRoom: subscribeRoom,
+    unsubscribeRoom: unsubscribeRoom
 };
