@@ -58,7 +58,7 @@ function createUser(username, displayname, password) {
 
 function createRoom(roomname) {
     var roomObj = { 'roomname': roomname };
-    rawSql('INSERT INTO room SET ?', roomObj)
+    return rawSql('INSERT INTO room SET ?', roomObj)
         .then((results) => {
             return results.insertId;
         })
@@ -73,7 +73,7 @@ function createMessage(roomId, senderId, content) {
         sender_id: senderId,
         content: content,
     };
-    rawSql('INSERT INTO message SET ?', msgObj)
+    return rawSql('INSERT INTO message SET ?', msgObj)
         .then((results) => {
             return results.insertId;
         })

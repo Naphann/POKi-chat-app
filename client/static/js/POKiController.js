@@ -6,6 +6,7 @@ $(window).load(function() {
     ]).onReady(function() {
         console.log("initialize completed..");
         router.go('/login')
+        launchSocket();
     },function() {
         welcome.serverDown();
     });

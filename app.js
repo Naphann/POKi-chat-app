@@ -111,7 +111,7 @@ io.on('connection', function (socket) {
                 // to get notification when new message comes 
                 // *** only if you are at main page ***
                 io.to('main room').emit('message', {
-                    roomId: roomId
+                    roomId: '-1'
                 });
             });
         // pass data to backup
