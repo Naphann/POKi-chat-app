@@ -6,6 +6,7 @@ var app = express();
 var http = require('http').createServer(app);
 var bodyParser = require('body-parser');
 var io = require('socket.io')(http);
+var clientIO = require('socket.io-client');
 var mysql = require('mysql');
 var db = require('./src/config/database-promise.js');
 var using = require('bluebird').using;
@@ -61,11 +62,43 @@ app.get('/test', (req, res) => {
 //     res.send(req.body);
 // });
 
+app.get('/foo', (req, res) => {
+    db.rawSql('SELECT * FROM room WHERE room_id NOT IN (SELECT room_id FROM user_room WHERE user_id = ?)', ['1'])
+        .then(results => {
+            console.log(results);
+            res.end('foo');
+        })
+
+})
+
+app.get('/bar', (req, res) => {
+    db.rawSql('SELECT * FROM room INNER JOIN user_room ON room.room_id = user_room.room_id WHERE user_id = ?', ['1'])
+        .then(results => {
+            console.log(results);
+            res.end('foo');
+        })
+
+})
+
 POKiAuth.init(passport, LocalStrategy);
 app.get('/login/check', POKiAuth.loggedIn);
 app.post('/login', POKiAuth.authenticate);
 
+
+// to sync data between servers
+if (app.get('type') === 'master') {
+    var client = clientIO.connect('http://localhost:3001', { reconnect: true });
+} else {
+    var client = clientIO.connect('http://localhost:3000', { reconnect: true });
+}
+
 io.on('connection', function (socket) {
+    console.log('there is a connection');
+    socket.emit('test', { x: ['hello world', 'foo', 'bar'] });
+    socket.on('test', (data) => {
+        console.log('get this:' + data);
+    })
+
     socket.on('ack', function () {
         socket.emit(app.get('type'));
     });
@@ -81,6 +114,8 @@ io.on('connection', function (socket) {
                     roomId: roomId
                 });
             });
+        // pass data to backup
+        client.emit('message', msg);
     });
 
     socket.on('create room', (data) => {
@@ -95,6 +130,8 @@ io.on('connection', function (socket) {
                     success: false
                 });
             });
+        // pass data to backup
+        client.emit('create room', data);
     });
 
     socket.on('join room', (data) => {
@@ -111,15 +148,21 @@ io.on('connection', function (socket) {
     socket.on('subscribe room', (data) => {
         console.log('subscribe room in db');
         db.subscribeRoom(data.userId, data.roomId);
+        // pass data to backup
+        client.emit('subscribe room', data);
     });
 
     socket.on('unsubscribe room', (data) => {
         console.log('exit room');
         db.unsubscribeRoom(data.userId, data.roomId);
+        // pass data to backup
+        client.emit('unsubscribe room', data);
     });
 
     socket.on('read', (data) => {
         db.readMessage(data.userId, data.roomId, data.messageId);
+        // pass data to backup
+        client.emit('read', data);
     });
 
     socket.on('all-room', (data) => {
