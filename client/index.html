@@ -19,20 +19,19 @@
   <script src="./static/js/utils.js"></script>
 
   <link id="welcome-style" rel="stylesheet" href="./static/css/welcome.css">
-  <script src=""></script>
   <script>
     // App
-    loadScript("./static/js/POKiController.js", // <<- Lastest
+    loadScript("./main-socket.js", // <<- Lastest
+    loadScript("./static/js/POKiController.js",
     loadScript("./main.js",
         // Core
         loadScript("./static/js/POKi.js",
             // Page
             loadScript("./static/js/welcome.js",
-            loadScript("./static/js/login.js")
-            )
+            loadScript("./static/js/login.js"
+            ))
         )
-    )
-    );
+    )));
   </script>
 
   <body style="background-color: cornsilk;">

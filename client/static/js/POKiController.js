@@ -6,6 +6,7 @@ $(window).load(function() {
         "localhost:3001",
     ]).onReady(function() {
         setTimeout(Welcome.serverConnect,700);
+        launchSocket();
     },function() {
         Welcome.serverDown();
     });
