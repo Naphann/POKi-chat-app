@@ -3,6 +3,7 @@
     "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,
-        "typings": true
+        "typings": true,
+        "node_modules": true
     }
 }
