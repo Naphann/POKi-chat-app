@@ -69,11 +69,11 @@ POKi.retry = function(success, fail) {
     retryInterval = setInterval(function () {
         retryTime++;
         console.log("Connection lost. Retrying...",retryTime);
-        POKi.refreshAll().onReady(()=> {
+        POKi.refreshAll().onReady(function() {
             clearInterval(retryInterval);
             if(success != undefined)
                 success();
-        },() => {
+        },function() {
             if(retryTime >= 10) {
                 clearInterval(retryInterval);
                 if(fail != undefined)
