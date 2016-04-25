@@ -2,21 +2,16 @@ $(document).ready(function(){
     var MyNav = Vue.extend({
     template:
         '<nav class="navbar navbar-fixed-top navbar-default" role="navigation">\
-            <div class="navbar-header">\
-                <a class="navbar-brand" href="#">POKi</a>\
-            </div>\
-            <div class="navbar-collapse">\
                 <ul class="nav navbar-nav navbar-left">\
+                    <li class="pull-left" ><a href="#">POKi</a></li>\
                     <li v-link-active ><a v-link="{ path: \'/joined-room\',activeClass: \'active\' }">JOINED ROOM</a></li>\
                     <li v-link-active ><a v-link="{ path: \'/all-room\'  ,activeClass: \'active\' }">ALL ROOM</a></li>\
                     <li v-link-active ><a v-link="{ path: \'/people\'    ,activeClass: \'active\' }">PEOPLE</a></li>\
                     <li v-link-active ><a v-link="{ path: \'/setting\'   ,activeClass: \'active\' }">SETTING</a></li>\
+                    <li class="pull-right" ><a href="#" v-on:click="logout($event)">Logout</a></li>\
                 </ul>\
-                <ul class="nav navbar-nav navbar-right">\
-                    <li><a href="#" v-on:click="logout($event)">Logout</a></li>\
-                </ul>\
-            </div>\
-        </nav>',
+        </nav>\
+        <div style="margin-bottom: 80px;"></div>',
         methods: {
             logout: function(event) {
                 event.preventDefault();
