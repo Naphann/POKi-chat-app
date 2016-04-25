@@ -40,9 +40,7 @@ var Login = new Vue({
                             toastr.success("Logged In.");
                             router.go("/joined-room");
                         }
-                        else {
-                            toastr.error("Invalid username or password.");
-                        }
+                        else toastr.error("Invalid username or password.");
                     },
                     error: function(error) {
                         toastr.warning("Server is disconnected.");

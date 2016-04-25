@@ -1,3 +1,32 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+.container {
+    display: table;
+    text-align: center;
+    height: 100%;
+}
+.fa {
+    color: red;
+}
+.status {
+    color: red;
+    font-size: 22px;
+    font-weight: bold;
+}
+.left {
+    float: left;
+}
+#login-modal > .modal-dialog {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
+}
 .page-header a {
     color: white;
     text-decoration: none;

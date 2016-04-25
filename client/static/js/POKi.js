@@ -124,7 +124,7 @@ POKi.isDisconnected = function() {
     return !connected;
 };
 // TRUE - Logged In
-POKi.loggedIn = function() {
+POKi.isLoggedIn = function() {
     var flag = false;
     $.ajax({
         type: "GET",

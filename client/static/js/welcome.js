@@ -23,16 +23,20 @@ var Welcome = Vue.extend({
 });
 
 Welcome.serverConnect = function() {
-    $("#spinner").fadeOut("slow",function() {
-        $("#welcome-status").fadeIn("slow",function() {
-            Login.toggle();
-        })
+    $("#spinner").fadeOut("fast",function() {
+        if(POKi.isLoggedIn())
+            router.go("/joined-room");
+        else {
+            $("#welcome-status").fadeIn("slow",function() {
+                Login.toggle();
+            });
+        }
     });
 }
 
 Welcome.serverDown = function() {
-    $("#spinner").fadeOut("slow",function() {
-        $("#down-status").fadeIn("slow");
+    $("#spinner").fadeOut("fast",function() {
+        $("#down-status").fadeIn("fast");
     });
 }
 
