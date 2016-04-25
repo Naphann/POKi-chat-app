@@ -91,6 +91,10 @@ app.post('/login/get', POKiAuth.checkLoggedIn,
         });
     }
 );
+app.get('/logout', (req,res) => {
+    req.logout();
+    res.send('Logged out.');
+});
 
 
 // to sync data between servers

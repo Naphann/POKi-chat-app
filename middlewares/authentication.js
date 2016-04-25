@@ -24,20 +24,16 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
                 password : 'password'
             },
             (username, password, done) => {
-                var data = false;
                 pool.getUser(username)
                     .then((results) => {
                         var user = results[0];
                         return user;
                     })
                     .then(user => {
-                        if(bcrypt.compareSync(password, user.password)) {
-                            delete user.password;
-                            data = true;
-                        }
-                        return done(null, user, true);
+                        return done(null, user, bcrypt.compareSync(password, user.password));
                     })
                     .catch((err) => {
+                        console.log(err);
                         return done(null, false, false);
                     })
                 // using(pool.getSqlConnection(), (conn) => {
