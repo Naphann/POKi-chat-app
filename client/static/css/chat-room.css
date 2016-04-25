@@ -121,10 +121,12 @@ body{
 .chat-css .speech p{
     font-size: 1.5em;
 }
+.chat-css .speech p.speech-time{
+    font-size: 0.8em;
+}
 .chat-css .speech-time {
     margin-top: 20px;
     margin-bottom: 0;
-    font-size: .8em;
     font-weight: 300;
 }
 .chat-css .media-block .media-right {

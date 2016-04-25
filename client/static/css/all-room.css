@@ -1,6 +1,6 @@
 .new-room-box .form-control{
-    height: 75px;
-    font-size: 50px;
+    height: 63px;
+    font-size: 40px;
 }
 .all-room-label.label-me{
     background-color:  chocolate;
@@ -15,5 +15,5 @@
     font-size: 30px;
 }
 .new-room-box .row{
-    font-size: 50px;
+    font-size: 40px;
 }
