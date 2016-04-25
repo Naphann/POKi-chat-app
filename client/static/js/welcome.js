@@ -22,6 +22,7 @@ var Welcome = Vue.extend({
 });
 
 Welcome.serverConnect = function() {
+    POKi.isStart = true;
     $("#spinner").fadeOut("fast",function() {
         if(POKi.isLoggedIn())
             router.go("/joined-room");

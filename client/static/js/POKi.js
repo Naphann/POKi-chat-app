@@ -1,4 +1,5 @@
 function POKi() {
+    this.isStart = false;
     console.log("POKi Chat Application Core.");
 };
 
@@ -65,22 +66,29 @@ POKi.refreshAll = function() {
 // Use when master is disconnected.
 // Refresh by set retrying interval every 3 seconds for 10 times
 POKi.retry = function(success, fail) {
-    var retryTime = 0,
-    retryInterval = setInterval(function () {
+    if(POKi.isRetrying)
+        return;
+    POKi.isRetrying = true;
+    var retryTime = 0;
+    function retryLoop() {
         retryTime++;
         console.log("Connection lost. Retrying...",retryTime);
         POKi.refreshAll().onReady(function() {
+            POKi.isRetrying = false;
             clearInterval(retryInterval);
             if(success != undefined)
                 success();
         },function() {
             if(retryTime >= 10) {
+                POKi.isRetrying = false;
                 clearInterval(retryInterval);
                 if(fail != undefined)
                     fail();
             }
         });
-    }, 3000);
+    }
+    retryLoop();
+    var retryInterval = setInterval(retryLoop, 3000);
 };
 
 // ############################################

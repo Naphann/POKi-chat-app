@@ -1,4 +1,3 @@
-var mydebug;
 var Login = new Vue({
     el: "#login-modal",
     data: {
@@ -22,7 +21,6 @@ var Login = new Vue({
             }
         },
         send: function(event,mode) {
-            mydebug = this;
             event.preventDefault();
             if(mode == "login") {
                 $.post({

@@ -42,7 +42,7 @@ var App = Vue.extend({});
 var router = new VueRouter();
 
 var temp = Vue.extend({
-    
+
     template:  '<div id="my-nav">\
                     <my-navbar></my-navbar>\
                 </div>\
@@ -73,6 +73,20 @@ $(window).on('load', function() {
         '/chat-room': {
             component: chatRoom
         }
+    });
+    router.beforeEach(function (transition) {
+        if (transition.to.path === '/') {
+            if(POKi.isStart != undefined && POKi.isStart) {
+                console.log("CALLLL",POKi.isStart);
+                POKi.retry(function() {
+                    setTimeout(Welcome.serverConnect,300);
+                    launchSocket();
+                },function() {
+                    Welcome.serverDown();
+                });
+            }
+        }
+        transition.next();
     });
     router.start(App, '#container');
 });
