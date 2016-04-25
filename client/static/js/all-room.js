@@ -59,6 +59,13 @@ var hideRoom = function(results){
     console.log(results.roomId);
     $('#room-'+results.roomId).addClass('hidden');
 };
+var createNewRoom = function(results) {
+    console.log("create new room to page");
+    console.log(results.roomId);
+    console.log(results.roomname);
+    allRoomData.items.unshift({name: results.roomname, roomId: results.roomId})
+};
+
 var allRoom = Vue.extend({
     template: '<div id="my-nav">\
                    <my-navbar></my-navbar>\
@@ -102,9 +109,10 @@ var allRoom = Vue.extend({
         addRoom: function () {
             var name = this.newRoomInput.trim()
             if (name) {
-                allRoomData.items.unshift({ name: name })
+                //allRoomData.items.unshift({name: name, roomId: item.room_id})
+                console.log("going to create new room");
                 this.newRoomInput = ''
-                POKi.masterServer.emit(roomname: name);
+                POKi.masterServer.emit('create room',{roomname: name});
             }
         },
         foo: function () {

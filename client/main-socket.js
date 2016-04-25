@@ -73,6 +73,9 @@ function launchSocket() {
     // results from creating room
     socket.on('create room', function (results) {
         console.log(results);
+        if(results.success) {
+            createNewRoom(results);
+        }
     });
     // data from all-room 
     socket.on('all-room', function (results) {
@@ -100,8 +103,10 @@ function launchSocket() {
     });
     //check insert join room successful
     socket.on('check-join-room', function (results) {
+        console.log("checkjoin");
+        console.log(results);
         if(results.success) {
-            hideroom(results);
+            hideRoom(results);
         }
     });
 }
