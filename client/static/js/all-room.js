@@ -69,6 +69,6 @@ allRoom.setAllRoomData = function(data) {
     });
 }
 
-allRoom.addAllRoomData = function(data) {
-    allRoomData.items.push({ name: data.roomname, roomId: data.room_id});
+allRoom.addAllRoomData = function(id, name) {
+    allRoomData.items.unshift({ name: name, roomId: id});
 }

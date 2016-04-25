@@ -133,9 +133,11 @@ io.on('connection', function (socket) {
 
     socket.on('create room', (data) => {
         db.createRoom(data.roomname)
-            .then(() => {
+            .then((insertId) => {
                 socket.emit('create room', {
-                    success: true
+                    success: true,
+                    roomId: insertId,
+                    roomname: data.roomname,
                 });
             })
             .catch(() => {

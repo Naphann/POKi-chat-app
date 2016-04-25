@@ -59,7 +59,7 @@ function launchSocket() {
     // results from creating room
     socket.on('create room', function (results) {
         if(results.success) {
-            allRoom.addAllRoomData(results.room);
+            allRoom.addAllRoomData(results.insertId,results.roomname);
             toastr.success("Crete room success.");
         }
     });
@@ -70,12 +70,11 @@ function launchSocket() {
     //send userID to get joined-room
     router.beforeEach(function (transition) {
         if (transition.to.path === '/joined-room') {
-            // transition.abort()
-            //console.log(USERID);
             socket.emit('joined-room',{ userId: USERID});
-            //console.log('emit event join room with id' + USERID)
         } else if(transition.to.path === '/all-room') {
             socket.emit('all-room', { userId: USERID});
+        } else if (transition.to.path === '/chat-room') {
+
         }
             transition.next();
     })
@@ -88,7 +87,10 @@ function launchSocket() {
     });
     // list of unread message
     socket.on('get unread', function (results) {
-        console.log(results);
+        console.log('unread results');
+        // console.log(results);
+        getChatRoomData(results);
+        router.go('/chat-room');
     });
 
 }

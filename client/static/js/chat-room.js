@@ -9,6 +9,21 @@ var chatData =  {
             newMsgInput: '',
             room_name: 'TestRoomName'
      };
+     
+var getChatRoomData = function(results) {
+    chatData.items = [];
+    results.forEach(function(msg, index) {
+        console.log(msg);
+        // chatData.items.push(msg);
+        var obj = {
+            username: msg.username,
+            pos: msg.username === USERNAME ? 'right': 'left',
+            message: msg.content.trim(),
+            time: msg.time
+        }
+        chatData.items.push(obj);
+    });
+};
 
 var chatRoom = Vue.extend({
     template:   '<div id="my-nav">\
