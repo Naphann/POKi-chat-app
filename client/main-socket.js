@@ -23,8 +23,11 @@ function launchSocket() {
         socket.emit('get unread', { userId: userId, roomId: currentRoom });
     })
     // when click on join room
-    $('#join-room').on('click', function () {
-        socket.emit('join room', { room: currentRoom });
+    $(document).on('click','.join-btn', function () {
+        var roomid = $(this).data('room-id');
+        console.log("roomid to join");
+        console.log(roomid);
+        socket.emit('subscribe room', { userId:USERID ,roomId: roomid });
     })
     // when leave room
     $('#leave-room').on('click', function () {
@@ -49,13 +52,18 @@ function launchSocket() {
         socket.emit('unsubscribe room', { roomId: roomId });
     });
     // should be called when in all-room page
-    $('#get-all-room').on('click', function () {
-        socket.emit('all-room', { userId: userId });
-    });
-    // should be called when in joined-room page
-    $('#get-joined-room').on('click', function () {
-        socket.emit('joined-room', { userId: userId });
-    });
+    
+    router.beforeEach(function (transition) {
+        if (transition.to.path === '/all-room') {
+            // transition.abort()
+            console.log("this iss all room psge");
+            socket.emit('all-room',{ userId: USERID});
+            //console.log('emit event join room with id' + USERID)
+        } else {
+            // transition.next()
+        }
+            transition.next();
+    })
 
     /* list of listened events */
     // message get by being in the room
@@ -68,7 +76,7 @@ function launchSocket() {
     });
     // data from all-room 
     socket.on('all-room', function (results) {
-        console.log(results);
+        getallData(results);
     });
     //send userID to get joined-room
     router.beforeEach(function (transition) {
@@ -81,9 +89,6 @@ function launchSocket() {
     })
     // data from joined-room
     socket.on('joined-room', function (results) {
-        //console.log('this is the raw results')
-        //console.dir(results)
-        //console.log('===========================')
         getjoinedData(results);
     });
     // list of unread message     
@@ -93,5 +98,10 @@ function launchSocket() {
         getChatRoomData(results);
         router.go('/chat-room');
     });
-
+    //check insert join room successful
+    socket.on('check-join-room', function (results) {
+        if(results.success) {
+            hideroom(results);
+        }
+    });
 }

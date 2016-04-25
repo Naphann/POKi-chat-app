@@ -31,7 +31,34 @@ var allRoomData = {
     ],
     newRoomInput: ''
 };
-
+var getallData = function(results){
+    //console.log(results.roomname);
+    // console.log('rest');
+    // console.log(results)
+    // console.log(results.length)
+    // joinedData = results;
+    /*if(results.length == 0){
+        $('#joind-list').addClass('hidden')
+        $('#error-pane').removeClass('hidden');
+    } else {
+        $('#joind-list').removeClass('hidden')
+        $('#error-pane').addClass('hidden');
+    }*/
+ 
+    allRoomData.items = [];
+    results.forEach(function(item) {
+        console.log(item);
+        allRoomData.items.push({ name: item.roomname, roomId: item.room_id});
+    })
+    // joinedData.items = results;
+    // console.log(joinedData.item);
+   
+   //joinedData = results
+};
+var hideRoom = function(results){
+    console.log(results.roomId);
+    $('#room-'+results.roomId).addClass('hidden');
+};
 var allRoom = Vue.extend({
     template: '<div id="my-nav">\
                    <my-navbar></my-navbar>\
@@ -51,19 +78,19 @@ var allRoom = Vue.extend({
                               placeholder=" room name" v-model="newRoomInput" v-on:keyup.enter="addRoom"> \
                      </div>\
                      <div class="col-sm-2">\
-                       <button class="btn btn-success" v-on:click="addRoom">\
+                       <button class="btn btn-success" id="create-room" v-on:click="addRoom">\
                          <span class="new-btn">Create</span>   \
                        </button>\
                      </div>\
                    </div>\
                  </div> \
                  <div class="room-list" id="all-list">\
-                   <div class="row well well-lg" v-for="item in items">\
+                   <div class="row well well-lg" id="room-{{ item.roomId }}" v-for="item in items">\
                      <div class="col-sm-1"><span class="glyphicon glyphicon-star"></span></div>\
                      <div class="col-sm-9"><a @click="foo">{{ item.name }}</a></div>\
                      <div class="col-sm-2">\
                        <button class="btn btn-warning">\
-                         <span class="join-btn" id="roomid-{{item.roomId}}">Join</span>   \
+                         <span class="join-btn" data-room-id="{{item.roomId}}">Join</span>   \
                        </button>\
                      </div>\
                    </div>\
@@ -77,6 +104,7 @@ var allRoom = Vue.extend({
             if (name) {
                 allRoomData.items.unshift({ name: name })
                 this.newRoomInput = ''
+                POKi.masterServer.emit(roomname: name);
             }
         },
         foo: function () {
