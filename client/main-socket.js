@@ -34,11 +34,13 @@ function launchSocket() {
         socket.emit('leave room', { room: currentRoom });
     });
     // called when permanent exit from the room
-    $('#unsubscribe-room').on('click', function () {
+    $(document).on('click','.unsubscribe-room', function () {
         // place holder dummy
-        var roomId = $(this).data('room-id');
-        socket.emit('unsubscribe room', { roomId: roomId });
-    })
+        console.log("unsub");
+        var roomid = $(this).data('room-id');
+        console.log(roomid);
+        socket.emit('unsubscribe room', { userId: USERID,roomId: roomid });
+    }) 
 
     /* list of listened events */
     // message get by being in the room
@@ -84,6 +86,14 @@ function launchSocket() {
         if(results.success) {
             allRoom.removeRoom(results.roomId);
             toastr.success("Joined room.");
+        }
+    });
+
+    socket.on('check-unsubscribe', function (results) {
+        if(results.success) {
+            console.log("unsub success");
+            joinedRoom.removeRoom(results.roomId);
+            toastr.success("unsubscribe room.");
         }
     });
 }

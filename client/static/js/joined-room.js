@@ -39,15 +39,15 @@ var joinedRoom = Vue.extend({
                  </h1>\
                </div>\
                <div class="room-list" id="joined-list">\
-                 <div class="row well well-lg" v-for="item in items" >\
+                 <div id="room-{{item.roomId}}" class="row well well-lg" v-for="item in items" >\
                    <div class="col-sm-1"><span class="glyphicon glyphicon-heart"></span></div>\
                    <div class="col-sm-7" id="joined-room-list">\
                      <a @click="gotoChatRoom(item.roomId)" data-room-id="{{item.roomId}}">{{ item.name }}</a>\
                    </div>\
                    <div class="col-sm-4">\
                         <span class="new-msg">{{ item.new_msg }}</span>\
-                        <button class="btn btn-danger">\
-                            <span class="unsubscribe-room" data-room-id="{{item.roomId}}">Unsubscribe</span>   \
+                        <button data-room-id="{{item.roomId}}" class="btn btn-danger unsubscribe-room">\
+                            <span>Unsubscribe</span>   \
                         </button>\
                    </div>\
                  </div>\
@@ -68,3 +68,8 @@ var joinedRoom = Vue.extend({
         }
     }
 })
+
+joinedRoom.removeRoom = function(roomId) {
+    console.log("remove room in join room");
+    $("#room-"+roomId).remove();
+}

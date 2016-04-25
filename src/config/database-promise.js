@@ -63,7 +63,7 @@ function createRoom(roomname) {
             return results.insertId;
         })
         .catch((err) => {
-            return -1;
+            throw -1;
         });
 }
 
@@ -78,7 +78,7 @@ function createMessage(roomId, senderId, content) {
             return rawSql('SELECT * FROM message WHERE message_id = ?', [results.insertId])
         })
         .catch((err) => {
-            return -1;
+            throw -1;
         });
 }
 
