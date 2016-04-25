@@ -1,13 +1,30 @@
 var joinedData = {
-    items: [
-    { name: 'SA Room' , new_msg : '16 New' },
-    { name: 'Dis Sys Room' , new_msg : '13 New' },
-    { name: 'TechWrite Room' , new_msg : '13 New' },
-    { name: 'CP40 Room' , new_msg : '13 New' },
-    { name: 'CP40.5 Room' , new_msg : '13 New' },
-    { name: 'SensorTech Room' , new_msg : '13 New' },
-    { name: 'Teacup Room' , new_msg : '19 New' }
-    ]
+    items: []
+};
+
+var getjoinedData = function(results){
+    //console.log(results.roomname);
+    // console.log('rest');
+    // console.log(results)
+    // console.log(results.length)
+    // joinedData = results;
+    if(results.length == 0){
+        $('#joind-list').addClass('hidden')
+        $('#error-pane').removeClass('hidden');
+    } else {
+        $('#joind-list').removeClass('hidden')
+        $('#error-pane').addClass('hidden');
+    }
+ 
+    joinedData.items = [];
+    results.forEach(function(item) {
+        console.log(item);
+        joinedData.items.push({ name: item.roomname, new_msg: '0 New'});
+    })
+    // joinedData.items = results;
+    // console.log(joinedData.item);
+   
+   //joinedData = results
 };
 
 var joinedRoom = Vue.extend({
@@ -24,14 +41,16 @@ var joinedRoom = Vue.extend({
             <div class="room-list" id="joined-list">\
                     <div class="row well well-lg" v-for="item in items" >\
                         <div class="col-sm-1"><span class="glyphicon glyphicon-heart"></span></div>\
-                        <div class="col-sm-8">\
+                        <div class="col-sm-8" id="joined-room-list">\
                             <a href="./chat-room.html?room={{ item.name }}">{{ item.name }}</a>\
                         </div>\
                         <div class="col-sm-3"><span class="new-msg">{{ item.new_msg }}</span></div>\
                     </div>\
-            </div>'
+            </div>\
+            <div class="hidden" id="error-pane"><h1>No room to show</h1></div>'
        ,
        data : function  () {
+            console.log(joinedData.items)
            return joinedData;
        }
 

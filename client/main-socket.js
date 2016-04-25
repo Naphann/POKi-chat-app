@@ -70,9 +70,23 @@ function launchSocket() {
     socket.on('all-room', function (results) {
         console.log(results);
     });
+    //send userID to get joined-room
+    router.beforeEach(function (transition) {
+        if (transition.to.path === '/joined-room') {
+            // transition.abort()
+            socket.emit('joined-room',{ userid: USERID});
+            console.log('hello word')
+        } else {
+            // transition.next()
+        }
+            transition.next();
+    })
     // data from joined-room
     socket.on('joined-room', function (results) {
-        console.log(results);
+        console.log('this is the raw results')
+        console.dir(results)
+        console.log('===========================')
+        getjoinedData(results);
     });
     // list of unread message     
     socket.on('get unread', function (results) {
