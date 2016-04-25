@@ -138,6 +138,10 @@ function getJoinedRoom(userId) {
     return rawSql('SELECT * FROM room INNER JOIN user_room ON room.room_id = user_room.room_id WHERE user_id = ?', [userId]);
 }
 
+function getUser(username) {
+    return rawSql('SELECT * FROM user WHERE username = ?', [username]);
+}
+
 module.exports = {
     getSqlConnection: getSqlConnection,
     createMessage: createMessage,
@@ -146,6 +150,7 @@ module.exports = {
     getNewMessage: getNewMessage,
     getAllRoom: getAllRoom,
     getJoinedRoom: getJoinedRoom,
+    getUser: getUser,
     rawSql: rawSql,
     readMessage: readMessage,
     pool: pool,

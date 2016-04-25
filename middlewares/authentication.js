@@ -25,27 +25,42 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
             },
             (username, password, done) => {
                 var data = false;
-                using(pool.getSqlConnection(), (conn) => {
-                    conn.queryAsync("SELECT user_id, displayname, password FROM user WHERE username=?",[username])
-                    .then(function (results) {
-                        return Promise.map(results, (user, idx) => {
-                            user.index = idx+1;
-                            return user;
-                        });
+                pool.getUser(username)
+                    .then((results) => {
+                        var user = results[0];
+                        return user;
                     })
-                    .then((users) => {
-                        if(users.length == 1) {
-                            if(bcrypt.compareSync(password, users[0].password)) {
-                                delete users[0].password;
-                                data = true;
-                            }
+                    .then(user => {
+                        if(bcrypt.compareSync(password, user.password)) {
+                            delete user.password;
+                            data = true;
                         }
-                        if(users[0])
-                            return done(null, users[0], data);
-                        else
-                            return done(null, false, data);
-                    });
-                });
+                        return done(null, user, true);
+                    })
+                    .catch((err) => {
+                        return done(null, false, false);
+                    })
+                // using(pool.getSqlConnection(), (conn) => {
+                //     conn.queryAsync("SELECT user_id, displayname, password FROM user WHERE username=?",[username])
+                //     .then(function (results) {
+                //         return Promise.map(results, (user, idx) => {
+                //             user.index = idx+1;
+                //             return user;
+                //         });
+                //     })
+                //     .then((users) => {
+                //         if(users.length == 1) {
+                //             if(bcrypt.compareSync(password, users[0].password)) {
+                //                 delete users[0].password;
+                //                 data = true;
+                //             }
+                //         }
+                //         if(users[0])
+                //             return done(null, users[0], data);
+                //         else
+                //             return done(null, false, data);
+                //     });
+                // });
             }
         ));
     }
