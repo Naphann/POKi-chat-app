@@ -41,13 +41,20 @@ var joinedRoom = Vue.extend({
                <div class="room-list" id="joined-list">\
                  <div class="row well well-lg" v-for="item in items" >\
                    <div class="col-sm-1"><span class="glyphicon glyphicon-heart"></span></div>\
-                   <div class="col-sm-8" id="joined-room-list">\
+                   <div class="col-sm-7" id="joined-room-list">\
                      <a @click="gotoChatRoom(item.roomId)" data-room-id="{{item.roomId}}">{{ item.name }}</a>\
                    </div>\
-                   <div class="col-sm-3"><span class="new-msg">{{ item.new_msg }}</span></div>\
+                   <div class="col-sm-4">\
+                        <span class="new-msg">{{ item.new_msg }}</span>\
+                        <button class="btn btn-danger">\
+                            <span class="unsub-btn" id="roomid-{{item.roomId}}">Unsubscribe</span>   \
+                        </button>\
+                   </div>\
                  </div>\
                </div>\
-               <div class="hidden" id="error-pane"><h1>No room to show</h1></div>',
+               <div class="hidden" id="error-pane"><h1>No room to show</h1></div>'
+               
+                ,
     data: function () {
         return joinedData;
     },

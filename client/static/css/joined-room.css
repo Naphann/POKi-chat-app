@@ -20,5 +20,8 @@
     font-size: 40px;
 }
 .room-list .new-msg{
-    font-size: 30px;
+    font-size: 20px;
+}
+#joined-list .row button{
+    font-size: 20px;
 }
