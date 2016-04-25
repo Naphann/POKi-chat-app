@@ -1,34 +1,34 @@
-{ 
+{
     "users": [
-        {             
+        {
             "username": "poki",
             "displayname": "poki",
-            "password": "$2a$10$R1inoiZrO/g6B3IbwmY7ROK7UBN34sO4n/b4xg3dWYt2Vfcsg.jvm"
+            "password": "poki"
         },
-        {              
+        {
             "username": "test",
             "displayname": "test",
-            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+            "password": "test"
         },
-        {             
+        {
             "username": "paul",
             "displayname": "paul",
-            "password": "$2a$10$FlqBp1ZEmDJVZb4gkYd9ruzR7DohcRxkBPcFuq9MMtuf17swDCYSC"
+            "password": "paul"
         },
-        {             
+        {
             "username": "omar",
             "displayname": "omar",
-            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+            "password": "omar"
         },
-        {             
+        {
             "username": "kim",
             "displayname": "kim",
-            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+            "password": "kin"
         },
-        {             
+        {
             "username": "inging",
             "displayname": "inging",
-            "password": "$2a$10$sBtaVq3sFJHLU.qBAEuqM.8n5wJcqAInA0vMJgckiCMsL6eIZ.o12"
+            "password": "inging"
         }
     ],
     "rooms": [
@@ -46,17 +46,17 @@
         {
             "user_id": "1",
             "room_id": "1",
-            "last_message_id": "3"           
+            "last_message_id": "3"
         },
         {
             "user_id": "2",
             "room_id": "1",
-            "last_message_id": "3"           
+            "last_message_id": "3"
         },
         {
             "user_id": "3",
             "room_id": "1",
-            "last_message_id": "3"           
+            "last_message_id": "3"
         }
     ],
     "user_room_without_last_id": [
