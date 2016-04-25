@@ -1,11 +1,11 @@
-module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt) {
+module.exports = function(passport, LocalStrategy, Promise, using, db, bcrypt) {
     function init() {
         passport.serializeUser(function(user, done) {
     		done(null, user.user_id);
         });
 
         passport.deserializeUser(function(id, done) {
-            using(pool.getSqlConnection(), (conn) => {
+            using(db.getSqlConnection(), (conn) => {
                 conn.queryAsync("SELECT * FROM user WHERE user_id=?",[id])
                 .then(function (results) {
                     return Promise.map(results, (user, idx) => {
@@ -24,7 +24,7 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
                 password : 'password'
             },
             (username, password, done) => {
-                pool.getUser(username)
+                db.getUser(username)
                     .then((results) => {
                         var user = results[0];
                         return user;
@@ -36,27 +36,6 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
                         console.log(err);
                         return done(null, false, false);
                     })
-                // using(pool.getSqlConnection(), (conn) => {
-                //     conn.queryAsync("SELECT user_id, displayname, password FROM user WHERE username=?",[username])
-                //     .then(function (results) {
-                //         return Promise.map(results, (user, idx) => {
-                //             user.index = idx+1;
-                //             return user;
-                //         });
-                //     })
-                //     .then((users) => {
-                //         if(users.length == 1) {
-                //             if(bcrypt.compareSync(password, users[0].password)) {
-                //                 delete users[0].password;
-                //                 data = true;
-                //             }
-                //         }
-                //         if(users[0])
-                //             return done(null, users[0], data);
-                //         else
-                //             return done(null, false, data);
-                //     });
-                // });
             }
         ));
     }
@@ -73,6 +52,14 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
         })(req, res, next);
     }
 
+    function signup(req, res, next) {
+        db.createUser(req.body.username, req.body.displayname, bcrypt.hashSync(req.body.password))
+            .then(()=>{ next(); })
+            .catch(() => {
+                res.send(false);
+            });
+    }
+
     function loggedIn(req, res) {
         res.send(req.isAuthenticated());
     }
@@ -85,5 +72,5 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
         }
     }
 
-    return { init: init, authenticate: authenticate, loggedIn: loggedIn, checkLoggedIn: checkLoggedIn};
+    return { init: init, authenticate: authenticate, loggedIn: loggedIn, checkLoggedIn: checkLoggedIn, signup: signup};
 }

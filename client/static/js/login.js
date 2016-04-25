@@ -34,14 +34,13 @@ var Login = new Vue({
                     },
                     success: function(response) {
                         if(response) {
-                            Login.toggle();
                             toastr.success("Logged In.");
                             router.go("/joined-room");
                             var user = POKi.getUser();
-                            console.log(user);
                             USERID = user.id;
                             USERNAME = user.username;
                             DISPLAYNAME = user.display;
+                            Login.toggle();
                         }
                         else toastr.error("Invalid username or password.");
                     },
@@ -51,10 +50,35 @@ var Login = new Vue({
                 });
             }
             else if(mode == "signup") {
-                this.mode = "login";
-                this.toggleButton = "Don't have account?";
-                this.submitButton = "Login";
-                $(this.$el).find("#displayName").slideUp().find("input").prop('disabled',true);
+                $.post({
+                    url: POKi.getLocation() + '/register',
+                    type: 'POST',
+                    data: $("form#login-form").serializeArray(),
+                    dataType : 'json',
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        if(response) {
+                            toastr.success("Logged In.");
+                            var user = POKi.getUser();
+                            USERID = user.id;
+                            USERNAME = user.username;
+                            DISPLAYNAME = user.display;
+                            this.mode = "login";
+                            this.toggleButton = "Don't have account?";
+                            this.submitButton = "Login";
+                            $(this.$el).find("#displayName").slideUp().find("input").prop('disabled',true); // BUG!!!
+                            Login.toggle();
+                            router.go("/joined-room");
+                        }
+                        else toastr.error("Already have this username.");
+                    },
+                    error: function(error) {
+                        toastr.warning("Server is disconnected.");
+                    }
+                });
             }
         }
     }
