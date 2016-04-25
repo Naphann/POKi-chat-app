@@ -54,6 +54,9 @@ var joinedRoom = Vue.extend({
     methods: {
         gotoChatRoom: function (roomId) {
             console.log('call get ' + roomId);
+            POKi.masterServer.emit('leave room', { roomId: CURRENT_ROOM });
+            POKi.masterServer.emit('join room', { roomId: roomId} );
+            CURRENT_ROOM = roomId;
             POKi.masterServer.emit('get unread', { userId: USERID, roomId: roomId});
         }
     }

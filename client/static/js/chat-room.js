@@ -1,32 +1,45 @@
-var chatData =  {
-            items: [
-                { username: 'Paul', pos: 'left', message:'Hello POKI.', time: '9:45 AM' },
-                { username: 'IngIng', pos: 'left', message:'Hello Word.', time: '9:46 AM' },
-                { username: 'Omar', pos: 'left', message:'Hello DisSys.', time: '9:47 AM' },
-                { username: 'Kim', pos: 'right', message:'Hello Friends.', time: '9:48 AM' },
-                { username: 'Paul', pos: 'left', message:'Good luck.', time: '9:49 AM' },
-            ],
-            newMsgInput: '',
-            room_name: 'TestRoomName'
-     };
-     
-var getChatRoomData = function(results) {
+var chatData = {
+    items: [
+        { username: 'Paul', pos: 'left', message: 'Hello POKI.', time: '9:45 AM' },
+        { username: 'IngIng', pos: 'left', message: 'Hello Word.', time: '9:46 AM' },
+        { username: 'Omar', pos: 'left', message: 'Hello DisSys.', time: '9:47 AM' },
+        { username: 'Kim', pos: 'right', message: 'Hello Friends.', time: '9:48 AM' },
+        { username: 'Paul', pos: 'left', message: 'Good luck.', time: '9:49 AM' },
+    ],
+    newMsgInput: '',
+    room_name: 'TestRoomName'
+};
+
+var getChatRoomData = function (results) {
     chatData.items = [];
-    results.forEach(function(msg, index) {
+    results.forEach(function (msg, index) {
         console.log(msg);
         // chatData.items.push(msg);
+        var timeStamp = msg.time.split('T').join(' ').split('.')[0];
+        // timeStamp = (+(timeStamp.split(' ')[1].split(':')[0]) + 7)
         var obj = {
             username: msg.username,
-            pos: msg.username === USERNAME ? 'right': 'left',
+            pos: msg.username === USERNAME ? 'right' : 'left',
             message: msg.content.trim(),
-            time: msg.time
+            time: timeStamp
         }
         chatData.items.push(obj);
     });
 };
 
+var appendMessage = function (msg) {
+    var timeStamp = msg.time.split('T').join(' ').split('.')[0];
+    var obj = {
+        username: msg.username,
+        pos: msg.username === USERNAME ? 'right' : 'left',
+        message: msg.content.trim(),
+        time: timeStamp
+    }
+    chatData.items.push(obj);
+};
+
 var chatRoom = Vue.extend({
-    template:   '<div id="my-nav">\
+    template: '<div id="my-nav">\
         <my-navbar></my-navbar>\
     </div>\
     <div class="page-header" style="text-align: center; margin-bottom: 28px;">\
@@ -81,17 +94,22 @@ var chatRoom = Vue.extend({
             </div>\
         </div>\
     </div>'
-       ,
-       data : function  () {
-           return chatData;
-       } ,
-       methods: {
-            addMsg: function () {
-                var msg = this.newMsgInput.trim()
-                if (msg) {
-                    chatData.items.push( { username: 'Kim', pos: 'right', message: msg , time: '9:50 AM' })
-                    this.newMsgInput = ''
-                }
-            }
+    ,
+    data: function () {
+        return chatData;
+    },
+    methods: {
+        addMsg: function () {
+            var msg = this.newMsgInput.trim()
+            if (msg == '') return;
+            this.newMsgInput = ''
+            var msgObj = {
+                content: msg,
+                senderId: USERID,
+                roomId: CURRENT_ROOM,
+                username: USERNAME
+            };
+            POKi.masterServer.emit('message', msgObj);
         }
+    }
 })

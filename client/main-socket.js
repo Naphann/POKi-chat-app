@@ -54,7 +54,7 @@ function launchSocket() {
     /* list of listened events */
     // message get by being in the room
     socket.on('message', function (results) {
-        console.log(results);
+        appendMessage(results);
     });
     // results from creating room
     socket.on('create room', function (results) {

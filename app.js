@@ -82,9 +82,9 @@ app.get('/bar', (req, res) => {
 
 POKiAuth.init(passport, LocalStrategy);
 app.post('/login', POKiAuth.authenticate);
-app.get ('/login/check', POKiAuth.loggedIn);
+app.get('/login/check', POKiAuth.loggedIn);
 app.post('/login/getUser', POKiAuth.checkLoggedIn,
-    (req,res) => {
+    (req, res) => {
         res.send({
             id: req.user.user_id,
             username: req.user.username,
@@ -92,7 +92,7 @@ app.post('/login/getUser', POKiAuth.checkLoggedIn,
         });
     }
 );
-app.get('/logout', (req,res) => {
+app.get('/logout', (req, res) => {
     req.logout();
     res.send('Logged out.');
 });
@@ -119,13 +119,18 @@ io.on('connection', function (socket) {
     socket.on('message', (msg) => {
         console.log(`receive message: '${msg.content}' to room: '${msg.roomId}' by '${msg.senderId}'`);
         db.createMessage(msg.roomId, msg.senderId, msg.content)
-            .then(() => {
-                io.to(msg.room).emit('message', msg);
+            .then((row) => {
+                var obj = row[0];
+                obj.username = msg.username;
+                io.to(msg.roomId).emit('message', obj);
                 // to get notification when new message comes
                 // *** only if you are at main page ***
                 io.to('main room').emit('message', {
                     roomId: '-1'
                 });
+            })
+            .catch((err) => {
+                console.error(err);
             });
         // pass data to backup
         client.emit('message', msg);
@@ -151,8 +156,8 @@ io.on('connection', function (socket) {
 
     socket.on('join room', (data) => {
         console.log('join event fired');
-        socket.leave(data.oldRoom);
-        socket.join(data.room);
+        // socket.leave(data.oldRoom);
+        socket.join(data.roomId);
     });
 
     socket.on('leave room', (data) => {

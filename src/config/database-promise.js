@@ -75,7 +75,7 @@ function createMessage(roomId, senderId, content) {
     };
     return rawSql('INSERT INTO message SET ?', msgObj)
         .then((results) => {
-            return results.insertId;
+            return rawSql('SELECT * FROM message WHERE message_id = ?', [results.insertId])
         })
         .catch((err) => {
             return -1;
