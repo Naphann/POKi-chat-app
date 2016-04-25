@@ -47,7 +47,7 @@ var joinedRoom = Vue.extend({
                    <div class="col-sm-4">\
                         <span class="new-msg">{{ item.new_msg }}</span>\
                         <button class="btn btn-danger">\
-                            <span class="unsub-btn" id="roomid-{{item.roomId}}">Unsubscribe</span>   \
+                            <span class="unsubscribe-room" data-room-id="{{item.roomId}}">Unsubscribe</span>   \
                         </button>\
                    </div>\
                  </div>\

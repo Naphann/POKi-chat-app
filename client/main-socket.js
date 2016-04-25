@@ -36,7 +36,7 @@ function launchSocket() {
     // called when permanent exit from the room
     $('#unsubscribe-room').on('click', function () {
         // place holder dummy
-        var roomId = null || -1;
+        var roomId = $(this).data('room-id');
         socket.emit('unsubscribe room', { roomId: roomId });
     })
 
@@ -48,7 +48,7 @@ function launchSocket() {
     // results from creating room
     socket.on('create room', function (results) {
         if(results.success) {
-            allRoom.addAllRoomData(results.insertId,results.roomname);
+            allRoom.addAllRoomData(results.roomId,results.roomname);
             toastr.success("Crete room success.");
         }
     });

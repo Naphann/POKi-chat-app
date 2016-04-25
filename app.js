@@ -189,7 +189,19 @@ io.on('connection', function (socket) {
 
     socket.on('unsubscribe room', (data) => {
         console.log('exit room');
-        db.unsubscribeRoom(data.userId, data.roomId);
+        db.unsubscribeRoom(data.userId, data.roomId)
+        .then(() => {
+                console.log("unsubscribe success");
+                socket.emit('check-unsubscribe', {
+                    success: true,
+                    roomId:data.roomId
+                });
+            })
+            .catch(() => {
+                socket.emit('check-unsubscribe', {
+                    success: false
+                });
+            });
         // pass data to backup
         client.emit('unsubscribe room', data);
     });
