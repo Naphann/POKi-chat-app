@@ -1,30 +1,30 @@
-.label-me{
+.chat-room-label.label-me{
     background-color:    burlywood;
 }
-.label{
+.chat-room-label.label{
     color:  #222;
 }
 
 body{
     background:#ebeef0;
 }
-.panel {
+.chat-css .panel {
     box-shadow: 0 2px 0 rgba(0,0,0,0.075);
     border-radius: 0;
     border: 0;
     margin-bottom: 24px;
 }
-.panel .panel-heading, .panel>:first-child {
+.chat-css .panel .panel-heading, .panel>:first-child {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-.panel-heading {
+.chat-css .panel-heading {
     position: relative;
     height: 50px;
     padding: 0;
     border-bottom:1px solid #eee;
 }
-.panel-title {
+.chat-css .panel-title {
     font-weight: normal;
     padding: 0 20px 0 20px;
     font-size: 1.416em;
@@ -33,13 +33,13 @@ body{
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.nano {
+.chat-css .nano {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
-.nano>.nano-content {
+.chat-css .nano>.nano-content {
     position: absolute;
     overflow: scroll;
     overflow-x: hidden;
@@ -48,30 +48,30 @@ body{
     bottom: 0;
     left: 0;
 }
-.pad-all {
+.chat-css .pad-all {
     padding: 15px;
 }
-.mar-btm {
+.chat-css .mar-btm {
     margin-bottom: 15px;
 }
-.media-block .media-left {
+.chat-css .media-block .media-left {
     display: block;
     float: left;
 }
-.img-sm {
+.chat-css .img-sm {
     width: 46px;
     height: 46px;
 }
-.media-block .media-body {
+.chat-css .media-block .media-body {
     display: block;
     overflow: hidden;
     width: auto;
 }
-.pad-hor {
+.chat-css .pad-hor {
     padding-left: 15px;
     padding-right: 15px;
 }
-.speech {
+.chat-css .speech {
     position: relative;
     background: #b7dcfe;
     color: #317787;
@@ -79,7 +79,7 @@ body{
     border-radius: 5px;
     padding: 12px 20px;
 }
-.speech:before {
+.chat-css .speech:before {
     content: "";
     display: block;
     position: absolute;
@@ -92,7 +92,10 @@ body{
     border-right: 7px solid #b7dcfe;
     margin: 15px 0 0 -6px;
 }
-.speech-right>.speech:before {
+.chat-css .speech-left{
+        display: inline-grid;
+}
+.chat-css .speech-right>.speech:before {
     left: auto;
     right: 0;
     border-top: 7px solid transparent;
@@ -101,7 +104,8 @@ body{
     border-right: 0;
     margin: 15px -6px 0 0;
 }
-.speech .media-heading {
+
+.chat-css .speech .media-heading {
     font-size: 1.2em;
     color: #317787;
     display: block;
@@ -110,39 +114,39 @@ body{
     padding-bottom: 5px;
     font-weight: 300;
 }
-.speech p{
+.chat-css .speech p{
     font-size: 1.5em;
 }
-.speech-time {
+.chat-css .speech-time {
     margin-top: 20px;
     margin-bottom: 0;
     font-size: .8em;
     font-weight: 300;
 }
-.media-block .media-right {
+.chat-css .media-block .media-right {
     float: right;
 }
-.speech-right {
+.chat-css .speech-right {
     text-align: right;
 }
-.pad-hor {
+.chat-css .pad-hor {
     padding-left: 15px;
     padding-right: 15px;
 }
-.speech-right>.speech {
+.chat-css .speech-right>.speech {
     background: #ffda87;
     color: #a07617;
     text-align: right;
 }
-.speech-right>.speech .media-heading {
+.chat-css .speech-right>.speech .media-heading {
     color: #a07617;
 }
-.btn-primary, .btn-primary:focus, .btn-hover-primary:hover, .btn-hover-primary:active, .btn-hover-primary.active, .btn.btn-active-primary:active, .btn.btn-active-primary.active, .dropdown.open>.btn.btn-active-primary, .btn-group.open .dropdown-toggle.btn.btn-active-primary {
+.chat-css .btn-primary, .btn-primary:focus, .btn-hover-primary:hover, .btn-hover-primary:active, .btn-hover-primary.active, .btn.btn-active-primary:active, .btn.btn-active-primary.active, .dropdown.open>.btn.btn-active-primary, .btn-group.open .dropdown-toggle.btn.btn-active-primary {
     background-color: #579ddb;
     border-color: #5fa2dd;
     color: #fff !important;
 }
-.btn {
+.chat-css .btn {
     cursor: pointer;
     /* background-color: transparent; */
     color: inherit;
@@ -156,7 +160,7 @@ body{
     transition: all .25s;
     height: 50px;
 }
-.form-control {
+.chat-css .form-control {
     font-size: 17px;
     height: 50px;
     border-radius: 40px;
@@ -164,7 +168,7 @@ body{
     border: 1px solid #e9e9e9;
     transition-duration: .5s;
 }
-.nano>.nano-pane {
+.chat-css .nano>.nano-pane {
     background-color: rgba(0,0,0,0.1);
     position: absolute;
     width: 5px;

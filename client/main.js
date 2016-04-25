@@ -33,13 +33,13 @@ var joinedRoom = Vue.extend({
                 </div>\
                 <div class="page-header" style="text-align: center;">\
                     <h1 id="page-tite"> \
-                    <span  class="label label-me"> \
+                    <span  class="่joined-label label label-me"> \
                         <a href="./joined-room.html"> Joined Room </a>\
                     </span>\
                     </h1>\
                 </div>\
             <div class="room-list" id="joined-list">\
-                    <div class="row well well-lg" v-for="item in items" :data="item">\
+                    <div class="row well well-lg" v-for="item in items" >\
                         <div class="col-sm-1"><span class="glyphicon glyphicon-heart"></span></div>\
                         <div class="col-sm-8">\
                             <a href="./chat-room.html?room={{ item.name }}">{{ item.name }}</a>\
@@ -60,7 +60,7 @@ var allRoom = Vue.extend({
             </div>\
             <div class="page-header" style="text-align: center;">\
                 <h1 id="page-tite"> \
-                <span  class="label label-me"> \
+                <span  class="all-room-label label label-me"> \
                     <a href="./all-room.html"> All Room </a>\
                 </span>\
                 </h1>\
@@ -111,12 +111,12 @@ var chatRoom = Vue.extend({
     </div>\
     <div class="page-header" style="text-align: center; margin-bottom: 28px;">\
         <h1 id="page-tite"> \
-           <span  class="label label-me"> \
+           <span  class="chat-room-label label label-me"> \
               {{room_name}}\
            </span>\
         </h1>\
     </div>\
-    <div class="container">\
+    <div class="container chat-css">\
         <div class="col-md-12">\
             <div class="panel">\
                 <!--Heading-->\
