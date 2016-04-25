@@ -61,12 +61,3 @@ var allRoom = Vue.extend({
             }
         }
 })
-
-$(window).load(function() {
-    var allList = new Vue({
-        el: '#all-list'
-    });
-    new Vue({
-        el: '#add-room-box'
-     });
-});

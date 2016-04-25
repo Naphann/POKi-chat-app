@@ -36,9 +36,3 @@ var joinedRoom = Vue.extend({
        }
 
 })
-
-$(window).load(function() {
-    var joinedList = new Vue({
-         el: '#joined-list'
-    })
-});
