@@ -39,6 +39,11 @@ var Login = new Vue({
                             Login.toggle();
                             toastr.success("Logged In.");
                             router.go("/joined-room");
+                            var user = POKi.getUser();
+                            console.log(user);
+                            USERID = user.id;
+                            USERNAME = user.username;
+                            DISPLAYNAME = user.display;
                         }
                         else toastr.error("Invalid username or password.");
                     },

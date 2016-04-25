@@ -87,6 +87,7 @@ app.post('/login/getUser', POKiAuth.checkLoggedIn,
     (req,res) => {
         res.send({
             id: req.user.user_id,
+            username: req.user.username,
             display: req.user.displayname,
         });
     }
