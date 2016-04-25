@@ -30,11 +30,11 @@ var allRoom = Vue.extend({
                </div>\
              </div> \
              <div class="room-list" id="all-list">\
-               <div class="row well well-lg" v-for="item in items">\
+               <div id="room-{{item.roomId}}" class="row well well-lg" v-for="item in items">\
                  <div class="col-sm-1"><span class="glyphicon glyphicon-star"></span></div>\
                  <div class="col-sm-9"><a @click="foo">{{ item.name }}</a></div>\
                  <div class="col-sm-2">\
-                   <button class="btn btn-warning">\
+                   <button class="btn btn-warning" v-on:click="subscribeRoom(item.roomId)">\
                      <span class="join-btn" id="roomid-{{item.roomId}}">Join</span>   \
                    </button>\
                  </div>\
@@ -56,6 +56,13 @@ var allRoom = Vue.extend({
             }
             this.newRoomInput = ''
         },
+        subscribeRoom: function (roomId) {
+            POKi.refreshAll().onReady(function() {
+                POKi.getMaster().emit('subscribe room', { userId: USERID, roomId: roomId });
+            },function() {
+                toastr.error("Server is disconnected.");
+            });
+        },
         foo: function () {
             router.go('/chat-room');
         }
@@ -71,4 +78,8 @@ allRoom.setAllRoomData = function(data) {
 
 allRoom.addAllRoomData = function(id, name) {
     allRoomData.items.unshift({ name: name, roomId: id});
+}
+
+allRoom.removeRoom = function(roomId) {
+    $("#room-"+roomId).remove();
 }

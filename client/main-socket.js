@@ -23,33 +23,22 @@ function launchSocket() {
         socket.emit('get unread', { userId: userId, roomId: currentRoom });
     })
     // when click on join room
-    $('#join-room').on('click', function () {
-        socket.emit('join room', { room: currentRoom });
+    $(document).on('click','.join-btn', function () {
+        var roomid = $(this).data('room-id');
+        console.log("roomid to join");
+        console.log(roomid);
+        socket.emit('subscribe room', { userId:USERID ,roomId: roomid });
     })
     // when leave room
     $('#leave-room').on('click', function () {
         socket.emit('leave room', { room: currentRoom });
-    });
-    // called when subscribe to new rooms
-    $('#subscribe-room').on('click', function () {
-        // place holder dummy
-        var roomId = null || -1;
-        socket.emit('subscribe room', { roomId: roomId });
     });
     // called when permanent exit from the room
     $('#unsubscribe-room').on('click', function () {
         // place holder dummy
         var roomId = null || -1;
         socket.emit('unsubscribe room', { roomId: roomId });
-    });
-    // should be called when in all-room page
-    $('#get-all-room').on('click', function () {
-        socket.emit('all-room', { userId: userId });
-    });
-    // should be called when in joined-room page
-    $('#get-joined-room').on('click', function () {
-        socket.emit('joined-room', { userId: userId });
-    });
+    })
 
     /* list of listened events */
     // message get by being in the room
@@ -80,9 +69,6 @@ function launchSocket() {
     })
     // data from joined-room
     socket.on('joined-room', function (results) {
-        //console.log('this is the raw results')
-        //console.dir(results)
-        //console.log('===========================')
         getjoinedData(results);
     });
     // list of unread message
@@ -93,4 +79,11 @@ function launchSocket() {
         router.go('/chat-room');
     });
 
+    //check insert join room successful
+    socket.on('check-join-room', function (results) {
+        if(results.success) {
+            allRoom.removeRoom(results.roomId);
+            toastr.success("Joined room.");
+        }
+    });
 }
