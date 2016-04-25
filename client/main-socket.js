@@ -30,12 +30,6 @@ function launchSocket() {
     $('#leave-room').on('click', function () {
         socket.emit('leave room', { room: currentRoom });
     });
-    // called when subscribe to new rooms
-    $('#subscribe-room').on('click', function () {
-        // place holder dummy
-        var roomId = null || -1;
-        socket.emit('subscribe room', { roomId: roomId });
-    });
     // called when permanent exit from the room
     $('#unsubscribe-room').on('click', function () {
         // place holder dummy

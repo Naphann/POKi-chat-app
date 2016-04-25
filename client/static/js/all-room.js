@@ -34,7 +34,7 @@ var allRoom = Vue.extend({
                  <div class="col-sm-1"><span class="glyphicon glyphicon-star"></span></div>\
                  <div class="col-sm-9"><a @click="foo">{{ item.name }}</a></div>\
                  <div class="col-sm-2">\
-                   <button class="btn btn-warning">\
+                   <button class="btn btn-warning" v-on:click="subscribeRoom(item.roomId)">\
                      <span class="join-btn" id="roomid-{{item.roomId}}">Join</span>   \
                    </button>\
                  </div>\
@@ -55,6 +55,14 @@ var allRoom = Vue.extend({
                 });
             }
             this.newRoomInput = ''
+        },
+        subscribeRoom: function (roomId) {
+            POKi.refreshAll().onReady(function() {
+                POKi.getMaster().emit('subscribe room', { userId: USERID, roomId: roomId });
+                toastr.success("Joined room.");
+            },function() {
+                toastr.error("Server is disconnected.");
+            });
         },
         foo: function () {
             router.go('/chat-room');
