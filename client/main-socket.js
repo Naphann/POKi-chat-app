@@ -74,8 +74,9 @@ function launchSocket() {
     router.beforeEach(function (transition) {
         if (transition.to.path === '/joined-room') {
             // transition.abort()
-            socket.emit('joined-room',{ userid: USERID});
-            console.log('hello word')
+            //console.log(USERID);
+            socket.emit('joined-room',{ userId: USERID});
+            //console.log('emit event join room with id' + USERID)
         } else {
             // transition.next()
         }
@@ -83,9 +84,9 @@ function launchSocket() {
     })
     // data from joined-room
     socket.on('joined-room', function (results) {
-        console.log('this is the raw results')
-        console.dir(results)
-        console.log('===========================')
+        //console.log('this is the raw results')
+        //console.dir(results)
+        //console.log('===========================')
         getjoinedData(results);
     });
     // list of unread message     

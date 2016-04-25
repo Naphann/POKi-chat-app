@@ -185,6 +185,8 @@ io.on('connection', function (socket) {
     });
 
     socket.on('joined-room', (data) => {
+        console.log("this is serve");
+        console.log(data);
         db.getJoinedRoom(data.userId).then(results => {
             socket.emit('joined-room', results);
         });
