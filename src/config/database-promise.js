@@ -115,10 +115,12 @@ function getOldMessage(roomId, limit, before) {
 /*
     use when there is all unread message in the room
 */
-function getNewMessage(roomId, userId) {
-    return rawSql('SELECT last_message_id FROM user_room WHERE user_id = ? AND room_id = ?')
+function getNewMessage(userId, roomId) {
+    console.log(roomId, userId);
+    return rawSql('SELECT last_message_id FROM user_room WHERE user_id = ? AND room_id = ?',[userId, roomId])
         .then((results) => {
-            return rawSql('SELECT * FROM message WHERE room_id = ? AND message_id > ?',
+            console.log(results);
+            return rawSql('SELECT * FROM message INNER JOIN user ON user.user_id = message.sender_id WHERE room_id = ? AND message_id > ?',
                 [roomId, results[0].last_message_id]);
         });
 }
