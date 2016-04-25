@@ -24,8 +24,32 @@ var Login = new Vue({
         send: function(event,mode) {
             mydebug = this;
             event.preventDefault();
-            alert("Send in mode " + mode);
-            if(mode == "signup") {
+            if(mode == "login") {
+                $.post({
+                    url: POKi.getLocation() + '/login',
+                    type: 'POST',
+                    data: $("form#login-form").serializeArray(),
+                    dataType : 'json',
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        if(response) {
+                            Login.toggle();
+                            toastr.success("Logged In.");
+                            router.go("/joined-room");
+                        }
+                        else {
+                            toastr.error("Invalid username or password.");
+                        }
+                    },
+                    error: function(error) {
+                        toastr.warning("Server is disconnected.");
+                    }
+                });
+            }
+            else if(mode == "signup") {
                 this.mode = "login";
                 this.toggleButton = "Don't have account?";
                 this.submitButton = "Login";

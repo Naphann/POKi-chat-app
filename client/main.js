@@ -184,27 +184,26 @@ var temp2 = Vue.extend({
     template: '<h1>hello22</h1>'
 })
 
-router.map({
-    '/': {
-        component: Welcome
-    },
-    '/all-room': {
-        component: allRoom
-    },
-    '/joined-room': {
-        component: joinedRoom
-    },
-    '/people': {
-        component: temp
-    },
-    '/setting': {
-        component: temp
-    },
-    '/chat-room': {
-        component: chatRoom
-    }
-});
-
 $(window).on('load', function() {
+    router.map({
+        '/': {
+            component: Welcome
+        },
+        '/all-room': {
+            component: allRoom
+        },
+        '/joined-room': {
+            component: joinedRoom
+        },
+        '/people': {
+            component: temp
+        },
+        '/setting': {
+            component: temp
+        },
+        '/chat-room': {
+            component: chatRoom
+        }
+    });
     router.start(App, '#container');
 });

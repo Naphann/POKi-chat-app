@@ -70,13 +70,11 @@ POKi.retry = function(success, fail) {
         retryTime++;
         console.log("Connection lost. Retrying...",retryTime);
         POKi.refreshAll().onReady(()=> {
-            console.log("Server okay.");
             clearInterval(retryInterval);
             if(success != undefined)
                 success();
         },() => {
             if(retryTime >= 10) {
-                console.log("Disconnected.");
                 clearInterval(retryInterval);
                 if(fail != undefined)
                     fail();

@@ -24,7 +24,7 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
                 password : 'password'
             },
             (username, password, done) => {
-                var data;
+                var data = false;
                 using(pool.getSqlConnection(), (conn) => {
                     conn.queryAsync("SELECT user_id, displayname, password FROM user WHERE username=?",[username])
                     .then(function (results) {
@@ -37,13 +37,11 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
                         if(users.length == 1) {
                             if(bcrypt.compareSync(password, users[0].password)) {
                                 delete users[0].password;
-                                data = { msg: "Login success.", user: users[0] };
+                                data = true;
                             }
-                            else data = { msg: "Invalid username or password."};
                         }
-                        else data = { msg: "Invalid username or password."};
-                        if(data.user)
-                            return done(null, data.user, data);
+                        if(users[0])
+                            return done(null, users[0], data);
                         else
                             return done(null, false, data);
                     });
