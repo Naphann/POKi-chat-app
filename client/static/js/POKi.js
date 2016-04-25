@@ -111,7 +111,7 @@ POKi.getUser = function() {
     $.ajax({
         type: "POST",
         async: false,
-        url : POKi.getLocation() + "/login/get",
+        url : POKi.getLocation() + "/login/getUser",
         crossDomain: true,
         xhrFields: {
             withCredentials: true

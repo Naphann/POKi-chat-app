@@ -83,7 +83,7 @@ app.get('/bar', (req, res) => {
 POKiAuth.init(passport, LocalStrategy);
 app.post('/login', POKiAuth.authenticate);
 app.get ('/login/check', POKiAuth.loggedIn);
-app.post('/login/get', POKiAuth.checkLoggedIn,
+app.post('/login/getUser', POKiAuth.checkLoggedIn,
     (req,res) => {
         res.send({
             id: req.user.user_id,
