@@ -7,10 +7,10 @@ $(document).ready(function(){
             </div>\
             <div class="navbar-collapse">\
                 <ul class="nav navbar-nav navbar-left">\
-                    <li><a href="./joined-room.html">JOINED ROOM</a></li>\
-                    <li><a href="./all-room.html">ALL ROOM</a></li>\
-                    <li><a href="./people.html">PEOPLE</a></li>\
-                    <li><a href="./setting.html">SETTING</a></li>\
+                    <li v-link-active ><a v-link="{ path: \'/joined-room\',activeClass: \'active\' }">JOINED ROOM</a></li>\
+                    <li v-link-active ><a v-link="{ path: \'/all-room\'  ,activeClass: \'active\' }">ALL ROOM</a></li>\
+                    <li v-link-active ><a v-link="{ path: \'/people\'    ,activeClass: \'active\' }">PEOPLE</a></li>\
+                    <li v-link-active ><a v-link="{ path: \'/setting\'   ,activeClass: \'active\' }">SETTING</a></li>\
                 </ul>\
                 <ul class="nav navbar-nav navbar-right">\
                     <li><a href="#" v-on:click="logout($event)">Logout</a></li>\
@@ -47,7 +47,11 @@ var App = Vue.extend({});
 var router = new VueRouter();
 
 var temp = Vue.extend({
-    template: '<h1>hello</h1>'
+    
+    template:  '<div id="my-nav">\
+                    <my-navbar></my-navbar>\
+                </div>\
+                <h1>hello</h1>'
 })
 
 var temp2 = Vue.extend({
