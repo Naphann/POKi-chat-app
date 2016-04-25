@@ -26,8 +26,22 @@ var pool = mysql.createPool({
     database: 'pokichat'
 });
 
+var poolBackup = mysql.createPool({
+    connectionLimit: 100,
+    host: 'localhost',
+    user: 'pokichat',
+    password: 'pokichat',
+    database: 'pokichat-backup'
+});
+
 function getSqlConnection() {
     return pool.getConnectionAsync().disposer((connection) => {
+        connection.release();
+    });
+}
+
+function getSqlConnectionBackup() {
+    return poolBackup.getConnectionAsync().disposer((connection) => {
         connection.release();
     });
 }
@@ -59,6 +73,27 @@ gulp.task('create-database', function () {
     console.log(info('creating database ...'));
     var sql = fs.readFileSync('db.sql').toString().split('--');
     sql.push('end');
+    using(getSqlConnection(), function (conn) {
+        Promise.each(sql, function (query) {
+            if (query === 'end') {
+                pool.end();
+                console.log(success('database created'));
+                bar();
+                return;
+            }
+            return conn.queryAsync(query)
+                .then(function (msg) {
+                    // console.dir(msg);
+                    console.log(info(`table ${query.split('(')[0].split(' ')[2]} created`));
+                });
+        }).catch(function (err) {
+            console.error(error(err));
+            pool.end();
+        });
+    }).catch(function (err) {
+        console.log(error('wtf something went wrong.'));
+    });
+    
     using(getSqlConnection(), function (conn) {
         Promise.each(sql, function (query) {
             if (query === 'end') {

@@ -12,8 +12,10 @@ POKi.init = function(serverList) {
     this.serverList = serverList;
     this.connecting = [];
     this.serverList.forEach(function(server) {
-        var socket = io("http://" + server);
-        socket.location = "http://" + server;
+        console.log(server.split(':')[1]);
+        var port =server.split(':')[1]
+        var socket = io("http://192.168.137.147:" + port);
+        socket.location = "http://192.168.137.147:" + port;
 
         socket.on('connect_error', function() {
             console.log("Socket to",server,"is closed.");
@@ -124,7 +126,7 @@ POKi.getUser = function() {
     $.ajax({
         type: "POST",
         async: false,
-        url : POKi.getLocation() + "/login/getUser",
+        url : "http://192.168.137.147:3000/login/getUser",
         crossDomain: true,
         xhrFields: {
             withCredentials: true
@@ -158,7 +160,7 @@ POKi.isLoggedIn = function() {
     $.ajax({
         type: "GET",
         async: false,
-        url : POKi.getLocation() + "/login/check",
+        url :  "http://192.168.137.147:3000/login/check",
         crossDomain: true,
         xhrFields: {
             withCredentials: true

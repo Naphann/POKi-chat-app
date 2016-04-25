@@ -46,7 +46,7 @@ var temp = Vue.extend({
     template:  '<div id="my-nav">\
                     <my-navbar></my-navbar>\
                 </div>\
-                <h1>hello</h1>'
+                <h1>COMING SOON</h1>'
 })
 
 var temp2 = Vue.extend({

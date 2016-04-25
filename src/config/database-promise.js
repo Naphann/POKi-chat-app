@@ -51,8 +51,10 @@ function createUser(username, displayname, password) {
         .then((data) => {
             console.log(info(`user ${username} created with user_id = ${data}`));
             // console.log(info(`this is the insert id ${data}`));
+            return data;
         }).catch((err) => {
             console.error(`error: ${err}`);
+            throw err;
         })
 }
 
@@ -148,6 +150,10 @@ function getUser(username) {
     return rawSql('SELECT * FROM user WHERE username = ?', [username]);
 }
 
+function getRoomName(roomId) {
+    return rawSql('SELECT roomname FROM room WHERE room_id = ?', [roomId]);
+}
+
 module.exports = {
     getSqlConnection: getSqlConnection,
     createMessage: createMessage,
@@ -161,5 +167,6 @@ module.exports = {
     readMessage: readMessage,
     pool: pool,
     subscribeRoom: subscribeRoom,
-    unsubscribeRoom: unsubscribeRoom
+    unsubscribeRoom: unsubscribeRoom,
+    getRoomName: getRoomName
 };

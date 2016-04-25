@@ -21,6 +21,7 @@ function launchSocket() {
     // should be called after joining the room
     $('#get-unread').on('click', function () {
         socket.emit('get unread', { userId: userId, roomId: currentRoom });
+        socket.emit('roomname', { roomId: currentRoom });
     })
     // when click on join room
     $(document).on('click','.join-btn', function () {
@@ -65,7 +66,7 @@ function launchSocket() {
         } else if(transition.to.path === '/all-room') {
             socket.emit('all-room', { userId: USERID});
         } else if (transition.to.path === '/chat-room') {
-
+            
         }
             transition.next();
     })
@@ -78,8 +79,17 @@ function launchSocket() {
         console.log('unread results');
         // console.log(results);
         getChatRoomData(results);
+        CURRENT_ROOM_NAME = results.roomname;
         router.go('/chat-room');
     });
+    
+    
+    socket.on('roomname', function(results){
+        console.log('room nameeeee')
+        console.log(results);
+        CURRENT_ROOM_NAME = results.roomname;
+    });
+    
 
     //check insert join room successful
     socket.on('check-join-room', function (results) {

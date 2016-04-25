@@ -12,6 +12,7 @@ var chatData = {
 
 var getChatRoomData = function (results) {
     chatData.items = [];
+    chatData.room_name = CURRENT_ROOM_NAME;
     results.forEach(function (msg, index) {
         console.log(msg);
         // chatData.items.push(msg);

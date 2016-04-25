@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 var io = require('socket.io')(http);
 var clientIO = require('socket.io-client');
 var mysql = require('mysql');
-var db = require('./src/config/database-promise.js');
 var using = require('bluebird').using;
 var Promise = require('bluebird');
 var bcrypt = require('bcrypt-nodejs');
@@ -31,13 +30,18 @@ app.use(express.static('src/views'));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+    res.setHeader('Access-Control-Allow-Origin', 'http://192.168.137.147:4000');
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 // Middlewares
+if (app.get('type') === 'master') {
+    var db = require('./src/config/database-promise.js');
+} else {
+    var db = require('./src/config/database-backup.js');
+}
 var POKiAuth = require('./middlewares/authentication.js')(passport, LocalStrategy, Promise, using, db, bcrypt);
 
 app.get('/', (req, res) => {
@@ -134,7 +138,10 @@ io.on('connection', function (socket) {
                 console.error(err);
             });
         // pass data to backup
-        client.emit('message', msg);
+        if (!msg.hasOwnProperty('backup')) {
+            msg.backup = true;
+            client.emit('message', msg);
+        }
     });
 
     socket.on('create room', (data) => {
@@ -172,11 +179,11 @@ io.on('connection', function (socket) {
     socket.on('subscribe room', (data) => {
         console.log('subscribe room in db');
         db.subscribeRoom(data.userId, data.roomId)
-        .then(() => {
+            .then(() => {
                 console.log("join success");
                 socket.emit('check-join-room', {
                     success: true,
-                    roomId:data.roomId
+                    roomId: data.roomId
                 });
             })
             .catch(() => {
@@ -185,7 +192,10 @@ io.on('connection', function (socket) {
                 });
             });
         // pass data to backup
-        client.emit('subscribe room', data);
+        if (!data.hasProperty('backup')) {
+            data.backup = true;
+            client.emit('subscribe room', data);
+        }
     });
 
     socket.on('unsubscribe room', (data) => {
@@ -204,13 +214,19 @@ io.on('connection', function (socket) {
                 });
             });
         // pass data to backup
-        client.emit('unsubscribe room', data);
+        if (!data.hasProperty('backup')) {
+            data.backup = true;
+            client.emit('unsubscribe room', data);
+        }
     });
 
     socket.on('read', (data) => {
         db.readMessage(data.userId, data.roomId, data.messageId);
         // pass data to backup
-        client.emit('read', data);
+        if (!data.hasProperty('backup')) {
+            data.backup = true;
+            client.emit('read', data);
+        }
     });
 
     socket.on('all-room', (data) => {
@@ -225,6 +241,7 @@ io.on('connection', function (socket) {
         db.getJoinedRoom(data.userId).then(results => {
             socket.emit('joined-room', results);
         });
+        client.emit('test', 'joined room');
     });
 
     socket.on('get unread', (data) => {
@@ -232,6 +249,23 @@ io.on('connection', function (socket) {
             .then(results => {
                 socket.emit('get unread', results);
             });
+    })
+    socket.on('roomname', (data) => {
+        console.log(`this is the roomid ${data.roomId}`);
+        console.log('get roomname');
+        console.log(data);
+        db.getRoomName(data.roomId).then(results => {
+            console.log(`room nameeeee`);
+            console.log(results);
+            socket.emit('roomname', results[0])
+        });
+    })
+});
+
+client.on('connection', function (socket) {
+    socket.on('test', (data) => {
+        console.log('connected to another server');
+        console.log(`get from another server ${data}`);
     })
 });
 
