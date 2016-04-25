@@ -162,12 +162,16 @@ io.on('connection', function (socket) {
                 });
             });
         // pass data to backup
-        client.emit('create room', data);
+        if (!data.hasOwnProperty('backup')) {
+            data.backup = true;
+            client.emit('create room', data);
+        }
     });
 
     socket.on('join room', (data) => {
         console.log('join event fired');
         // socket.leave(data.oldRoom);
+        CURRENT_ROOM = data.roomId;
         socket.join(data.roomId);
     });
 
@@ -241,7 +245,10 @@ io.on('connection', function (socket) {
         db.getJoinedRoom(data.userId).then(results => {
             socket.emit('joined-room', results);
         });
-        client.emit('test', 'joined room');
+        if (!data.hasOwnProperty('backup')) {
+            data.backup = true;
+            client.emit('message', data);
+        }
     });
 
     socket.on('get unread', (data) => {
@@ -269,6 +276,10 @@ client.on('connection', function (socket) {
     })
 });
 
+client.on('disconnect', function(socket) {
+    console.log('server disconnect');
+    app.set('type', 'master');
+})
 
 
 http.listen(app.get('port'));
