@@ -93,27 +93,6 @@ gulp.task('create-database', function () {
     }).catch(function (err) {
         console.log(error('wtf something went wrong.'));
     });
-    
-    using(getSqlConnection(), function (conn) {
-        Promise.each(sql, function (query) {
-            if (query === 'end') {
-                pool.end();
-                console.log(success('database created'));
-                bar();
-                return;
-            }
-            return conn.queryAsync(query)
-                .then(function (msg) {
-                    // console.dir(msg);
-                    console.log(info(`table ${query.split('(')[0].split(' ')[2]} created`));
-                });
-        }).catch(function (err) {
-            console.error(error(err));
-            pool.end();
-        });
-    }).catch(function (err) {
-        console.log(error('wtf something went wrong.'));
-    });
 });
 
 

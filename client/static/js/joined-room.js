@@ -3,11 +3,8 @@ var joinedData = {
 };
 
 var getjoinedData = function (results) {
-    //console.log(results.roomname);
-    // console.log('rest');
-    // console.log(results)
-    // console.log(results.length)
-    // joinedData = results;
+    console.log(results);
+    console.log('get join data called');
     if (results.length == 0) {
         $('#joind-list').addClass('hidden')
         $('#error-pane').removeClass('hidden');
@@ -19,8 +16,10 @@ var getjoinedData = function (results) {
     joinedData.items = [];
     results.forEach(function (item) {
         console.log(item);
-        joinedData.items.push({ name: item.roomname, new_msg: '0 New', roomId: item.room_id});
+        joinedData.items.push({ name: item.roomname, new_msg: '', roomId: item.room_id});
     })
+    
+    console.log(joinedData.items);
     // joinedData.items = results;
     // console.log(joinedData.item);
 
@@ -56,10 +55,12 @@ var joinedRoom = Vue.extend({
                
                 ,
     data: function () {
+        console.log(joinedData.items);
         return joinedData;
     },
     methods: {
         gotoChatRoom: function (roomId) {
+            CURRENT_ROOM = roomId;
             console.log('call get ' + roomId);
             POKi.masterServer.emit('leave room', { roomId: CURRENT_ROOM });
             POKi.masterServer.emit('join room', { roomId: roomId } );

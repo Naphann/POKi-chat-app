@@ -42,7 +42,15 @@ if (app.get('type') === 'master') {
 } else {
     var db = require('./src/config/database-backup.js');
 }
-var POKiAuth = require('./middlewares/authentication.js')(passport, LocalStrategy, Promise, using, db, bcrypt);
+
+// to sync data between servers
+if (app.get('type') === 'master') {
+    var client = clientIO.connect('http://localhost:3001', { reconnect: true });
+} else {
+    var client = clientIO.connect('http://localhost:3000', { reconnect: true });
+}
+
+var POKiAuth = require('./middlewares/authentication.js')(passport, LocalStrategy, Promise, using, db, bcrypt, client);
 
 app.get('/', (req, res) => {
     db.rawSql('SELECT * FROM USER WHERE user_id < ? and user_id > ?', [4, 2])
@@ -103,12 +111,7 @@ app.get('/logout', (req, res) => {
 });
 
 
-// to sync data between servers
-if (app.get('type') === 'master') {
-    var client = clientIO.connect('http://localhost:3001', { reconnect: true });
-} else {
-    var client = clientIO.connect('http://localhost:3000', { reconnect: true });
-}
+
 
 io.on('connection', function (socket) {
     console.log('there is a connection');
@@ -138,7 +141,7 @@ io.on('connection', function (socket) {
                 console.error(err);
             });
         // pass data to backup
-        if (!msg.hasOwnProperty('backup')) {
+        if (!msg.hasOwnProperty('backup')) { 
             msg.backup = true;
             client.emit('message', msg);
         }
@@ -196,7 +199,7 @@ io.on('connection', function (socket) {
                 });
             });
         // pass data to backup
-        if (!data.hasProperty('backup')) {
+        if (!data.hasOwnProperty('backup')) {
             data.backup = true;
             client.emit('subscribe room', data);
         }
@@ -218,7 +221,7 @@ io.on('connection', function (socket) {
                 });
             });
         // pass data to backup
-        if (!data.hasProperty('backup')) {
+        if (!data.hasOwnProperty('backup')) {
             data.backup = true;
             client.emit('unsubscribe room', data);
         }
@@ -227,7 +230,7 @@ io.on('connection', function (socket) {
     socket.on('read', (data) => {
         db.readMessage(data.userId, data.roomId, data.messageId);
         // pass data to backup
-        if (!data.hasProperty('backup')) {
+        if (!data.hasOwnProperty('backup')) {
             data.backup = true;
             client.emit('read', data);
         }
@@ -243,11 +246,12 @@ io.on('connection', function (socket) {
         console.log("this is serve");
         console.log(data);
         db.getJoinedRoom(data.userId).then(results => {
+            console.log(results);
             socket.emit('joined-room', results);
         });
         if (!data.hasOwnProperty('backup')) {
             data.backup = true;
-            client.emit('message', data);
+            // client.emit('joined-room', data);
         }
     });
 
@@ -267,6 +271,11 @@ io.on('connection', function (socket) {
             socket.emit('roomname', results[0])
         });
     })
+    
+    socket.on('create user', (data) => {
+        console.log('create user');
+        db.createUser(data.username, data.displayname, data.hash);
+    });
 });
 
 client.on('connection', function (socket) {
@@ -275,6 +284,11 @@ client.on('connection', function (socket) {
         console.log(`get from another server ${data}`);
     })
 });
+
+client.on('create user', (data) => {
+    console.log('create user');
+    db.createUser(data.username, data.displayname, data.hash);
+})
 
 client.on('disconnect', function(socket) {
     console.log('server disconnect');

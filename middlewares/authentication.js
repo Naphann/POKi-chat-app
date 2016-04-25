@@ -1,4 +1,4 @@
-module.exports = function(passport, LocalStrategy, Promise, using, db, bcrypt) {
+module.exports = function(passport, LocalStrategy, Promise, using, db, bcrypt, client) {
     function init() {
         passport.serializeUser(function(user, done) {
     		done(null, user.user_id);
@@ -53,7 +53,11 @@ module.exports = function(passport, LocalStrategy, Promise, using, db, bcrypt) {
     }
 
     function signup(req, res, next) {
-        db.createUser(req.body.username, req.body.displayname, bcrypt.hashSync(req.body.password))
+        var username = req.body.username;
+        var displayname = req.body.displayname;
+        var hash = bcrypt.hashSync(req.body.password)
+        client.emit('create user', {username: username, displayname: displayname, hash: hash});
+        db.createUser(username, displayname, hash)
             .then(()=>{ next(); })
             .catch(() => {
                 res.send(false);

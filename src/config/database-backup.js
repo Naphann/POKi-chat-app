@@ -16,7 +16,7 @@ var pool = mysql.createPool({
     host: 'localhost',
     user: 'pokichat',
     password: 'pokichat',
-    database: 'pokichat'
+    database: 'pokichat-backup'
 });
 
 function getSqlConnection() {
@@ -51,10 +51,8 @@ function createUser(username, displayname, password) {
         .then((data) => {
             console.log(info(`user ${username} created with user_id = ${data}`));
             // console.log(info(`this is the insert id ${data}`));
-            return data;
         }).catch((err) => {
             console.error(`error: ${err}`);
-            throw err;
         })
 }
 
@@ -65,7 +63,7 @@ function createRoom(roomname) {
             return results.insertId;
         })
         .catch((err) => {
-            throw -1;
+            return -1;
         });
 }
 
@@ -80,7 +78,7 @@ function createMessage(roomId, senderId, content) {
             return rawSql('SELECT * FROM message WHERE message_id = ?', [results.insertId])
         })
         .catch((err) => {
-            throw -1;
+            return -1;
         });
 }
 

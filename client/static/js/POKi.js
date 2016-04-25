@@ -12,7 +12,7 @@ POKi.init = function(serverList) {
     this.serverList = serverList;
     this.connecting = [];
     this.serverList.forEach(function(server) {
-        console.log(server.split(':')[1]);
+        console.log(server);
         var port =server.split(':')[1]
         var socket = io("http://192.168.137.147:" + port);
         socket.location = "http://192.168.137.147:" + port;
@@ -31,7 +31,10 @@ POKi.init = function(serverList) {
 
         socket.on('disconnect', function() {
             if(socket.isMaster) {
-                POKi.retry();
+                POKi.retry(function() {
+                    launchSocket();
+                    window.location.href = "http://192.168.137.147:4000";
+                });
             }
         });
 
@@ -126,7 +129,7 @@ POKi.getUser = function() {
     $.ajax({
         type: "POST",
         async: false,
-        url : "http://192.168.137.147:3000/login/getUser",
+        url : POKi.getLocation() + "/login/getUser",
         crossDomain: true,
         xhrFields: {
             withCredentials: true
@@ -160,7 +163,7 @@ POKi.isLoggedIn = function() {
     $.ajax({
         type: "GET",
         async: false,
-        url :  "http://192.168.137.147:3000/login/check",
+        url :  POKi.getLocation() + "/login/check",
         crossDomain: true,
         xhrFields: {
             withCredentials: true

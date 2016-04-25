@@ -80,7 +80,7 @@ $(window).on('load', function() {
                 console.log("CALLLL",POKi.isStart);
                 POKi.retry(function() {
                     setTimeout(Welcome.serverConnect,300);
-                    launchSocket();
+                    // launchSocket();
                 },function() {
                     Welcome.serverDown();
                 });

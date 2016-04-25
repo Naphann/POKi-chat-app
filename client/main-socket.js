@@ -24,12 +24,12 @@ function launchSocket() {
         socket.emit('roomname', { roomId: currentRoom });
     })
     // when click on join room
-    $(document).on('click','.join-btn', function () {
-        var roomid = $(this).data('room-id');
-        console.log("roomid to join");
-        console.log(roomid);
-        socket.emit('subscribe room', { userId:USERID ,roomId: roomid });
-    })
+    // $(document).on('click','.join-btn', function () {
+    //     var roomid = $(this).data('room-id');
+    //     console.log("roomid to join");
+    //     console.log(roomid);
+    //     socket.emit('subscribe room', { userId:USERID ,roomId: roomid });
+    // })
     // when leave room
     $('#leave-room').on('click', function () {
         socket.emit('leave room', { room: currentRoom });

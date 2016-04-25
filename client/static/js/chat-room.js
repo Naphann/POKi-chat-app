@@ -37,6 +37,7 @@ var appendMessage = function (msg) {
         time: timeStamp
     }
     chatData.items.push(obj);
+    setTimeout(function() {$('.nano-content').scrollTop(20000000000); }, 5);
 };
 
 var chatRoom = Vue.extend({

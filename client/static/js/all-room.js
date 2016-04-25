@@ -48,20 +48,21 @@ var allRoom = Vue.extend({
         addRoom: function () {
             var name = this.newRoomInput.trim()
             if (name) {
-                POKi.refreshAll().onReady(function() {
+                // POKi.refreshAll().onReady(function() {
                     POKi.getMaster().emit('create room', { userId: USERID, roomname: name });
-                },function() {
-                    toastr.error("Server is disconnected.");
-                });
+                // },function() {
+                    // toastr.error("Server is disconnected.");
+                // });
             }
             this.newRoomInput = ''
         },
         subscribeRoom: function (roomId) {
-            POKi.refreshAll().onReady(function() {
+            // POKi.refreshAll().onReady(function() {
+                console.log('subscribe room');
                 POKi.getMaster().emit('subscribe room', { userId: USERID, roomId: roomId });
-            },function() {
-                toastr.error("Server is disconnected.");
-            });
+            // },function() {
+                // toastr.error("Server is disconnected.");
+            // });
         },
         foo: function () {
             router.go('/chat-room');
