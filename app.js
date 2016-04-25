@@ -81,8 +81,16 @@ app.get('/bar', (req, res) => {
 })
 
 POKiAuth.init(passport, LocalStrategy);
-app.get('/login/check', POKiAuth.loggedIn);
 app.post('/login', POKiAuth.authenticate);
+app.get ('/login/check', POKiAuth.loggedIn);
+app.post('/login/get', POKiAuth.checkLoggedIn,
+    (req,res) => {
+        res.send({
+            id: req.user.user_id,
+            display: req.user.displayname,
+        });
+    }
+);
 
 
 // to sync data between servers
@@ -108,7 +116,7 @@ io.on('connection', function (socket) {
         db.createMessage(msg.roomId, msg.senderId, msg.content)
             .then(() => {
                 io.to(msg.room).emit('message', msg);
-                // to get notification when new message comes 
+                // to get notification when new message comes
                 // *** only if you are at main page ***
                 io.to('main room').emit('message', {
                     roomId: '-1'

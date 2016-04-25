@@ -106,6 +106,22 @@ POKi.status = function() {
     });
     return status;
 };
+POKi.getUser = function() {
+    var user = false;
+    $.ajax({
+        type: "POST",
+        async: false,
+        url : POKi.getLocation() + "/login/get",
+        crossDomain: true,
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(response) {
+            user = response;
+        },
+    });
+    return user;
+}
 
 
 // ############################################

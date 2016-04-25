@@ -63,12 +63,16 @@ module.exports = function(passport, LocalStrategy, Promise, using, pool, bcrypt)
     }
 
     function loggedIn(req, res) {
+        res.send(req.isAuthenticated());
+    }
+
+    function checkLoggedIn(req, res, next) {
         if (req.isAuthenticated()) {
-            res.send(true);
+            next();
         } else {
             res.send(false);
         }
     }
 
-    return { init: init, authenticate: authenticate, loggedIn: loggedIn};
+    return { init: init, authenticate: authenticate, loggedIn: loggedIn, checkLoggedIn: checkLoggedIn};
 }
