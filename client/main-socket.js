@@ -30,12 +30,6 @@ function launchSocket() {
     $('#leave-room').on('click', function () {
         socket.emit('leave room', { room: currentRoom });
     });
-    // called when create new room
-    $('#create-room').on('click', function () {
-        // place holder dummy
-        var roomName = null || 'room 39';
-        socket.emit('create room', { roomname: roomName });
-    });
     // called when subscribe to new rooms
     $('#subscribe-room').on('click', function () {
         // place holder dummy
@@ -64,11 +58,14 @@ function launchSocket() {
     });
     // results from creating room
     socket.on('create room', function (results) {
-        console.log(results);
+        if(results.success) {
+            allRoom.addAllRoomData(results.room);
+            toastr.success("Crete room success.");
+        }
     });
-    // data from all-room 
+    // data from all-room
     socket.on('all-room', function (results) {
-        console.log(results);
+        allRoom.setAllRoomData(results);
     });
     //send userID to get joined-room
     router.beforeEach(function (transition) {
@@ -77,8 +74,8 @@ function launchSocket() {
             //console.log(USERID);
             socket.emit('joined-room',{ userId: USERID});
             //console.log('emit event join room with id' + USERID)
-        } else {
-            // transition.next()
+        } else if(transition.to.path === '/all-room') {
+            socket.emit('all-room', { userId: USERID});
         }
             transition.next();
     })
@@ -89,7 +86,7 @@ function launchSocket() {
         //console.log('===========================')
         getjoinedData(results);
     });
-    // list of unread message     
+    // list of unread message
     socket.on('get unread', function (results) {
         console.log(results);
     });

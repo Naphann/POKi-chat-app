@@ -16,6 +16,7 @@ POKi.init = function(serverList) {
         socket.location = "http://" + server;
 
         socket.on('connect_error', function() {
+            console.log("Socket to",server,"is closed.");
             socket.close();
             POKi.endTest++;
         });
@@ -55,6 +56,7 @@ POKi.init = function(serverList) {
 // Refresh all disconnected server
 // Can be used with .onReady(success,fail)
 POKi.refreshAll = function() {
+    console.log("refresh all");
     this.endTest = 0;
     this.connecting.forEach(function(socket) {
         if(!socket.connected)
@@ -94,10 +96,13 @@ POKi.retry = function(success, fail) {
 // ############################################
 //                  Get Methods
 // ############################################
+// Return master server socket
+POKi.getMaster = function() {
+    return this.masterServer;
+};
+
 // Return master server location ("http://...")
 POKi.getLocation = function() {
-    if(!this.ready())
-        this.refresh();
     return this.masterServer.location;
 };
 
