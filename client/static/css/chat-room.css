@@ -1,3 +1,7 @@
+.container.chat-css{
+    text-align: initial;
+}
+
 .chat-room-label.label-me{
     background-color:    burlywood;
 }
@@ -145,6 +149,10 @@ body{
     background-color: #579ddb;
     border-color: #5fa2dd;
     color: #fff !important;
+}
+.chat-css .btn-primary:hover,.btn-primary:focus{
+    background-color: #579ddb;
+    background-position-y:0px;
 }
 .chat-css .btn {
     cursor: pointer;
