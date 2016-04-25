@@ -92,6 +92,10 @@ function subscribeRoom(userId, roomId) {
             // console.log(results);
             obj.last_message_id = results[0].message_id;
             return insertSql('user_room', obj);
+        })
+        .catch(err => {
+            obj.last_message_id = 0;
+            return insertSql('user_room', obj);
         });
 }
 
