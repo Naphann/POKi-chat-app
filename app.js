@@ -134,6 +134,8 @@ io.on('connection', function (socket) {
     socket.on('create room', (data) => {
         db.createRoom(data.roomname)
             .then((insertId) => {
+                console.log("create success");
+                console.log(insertId);
                 socket.emit('create room', {
                     success: true,
                     roomId: insertId,
@@ -141,6 +143,7 @@ io.on('connection', function (socket) {
                 });
             })
             .catch(() => {
+                console.log("create failed");
                 socket.emit('create room', {
                     success: false
                 });
@@ -162,7 +165,19 @@ io.on('connection', function (socket) {
 
     socket.on('subscribe room', (data) => {
         console.log('subscribe room in db');
-        db.subscribeRoom(data.userId, data.roomId);
+        db.subscribeRoom(data.userId, data.roomId)
+        .then(() => {
+                console.log("join success");
+                socket.emit('check-join-room', {
+                    success: true,
+                    roomId:data.roomId
+                });
+            })
+            .catch(() => {
+                socket.emit('check-join-room', {
+                    success: false
+                });
+            });
         // pass data to backup
         client.emit('subscribe room', data);
     });

@@ -30,7 +30,7 @@ var allRoom = Vue.extend({
                </div>\
              </div> \
              <div class="room-list" id="all-list">\
-               <div class="row well well-lg" v-for="item in items">\
+               <div id="room-{{item.roomId}}" class="row well well-lg" v-for="item in items">\
                  <div class="col-sm-1"><span class="glyphicon glyphicon-star"></span></div>\
                  <div class="col-sm-9"><a @click="foo">{{ item.name }}</a></div>\
                  <div class="col-sm-2">\
@@ -59,7 +59,6 @@ var allRoom = Vue.extend({
         subscribeRoom: function (roomId) {
             POKi.refreshAll().onReady(function() {
                 POKi.getMaster().emit('subscribe room', { userId: USERID, roomId: roomId });
-                toastr.success("Joined room.");
             },function() {
                 toastr.error("Server is disconnected.");
             });
@@ -79,4 +78,8 @@ allRoom.setAllRoomData = function(data) {
 
 allRoom.addAllRoomData = function(id, name) {
     allRoomData.items.unshift({ name: name, roomId: id});
+}
+
+allRoom.removeRoom = function(roomId) {
+    $("#room-"+roomId).remove();
 }
