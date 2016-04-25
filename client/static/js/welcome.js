@@ -24,8 +24,13 @@ var Welcome = Vue.extend({
 Welcome.serverConnect = function() {
     POKi.isStart = true;
     $("#spinner").fadeOut("fast",function() {
-        if(POKi.isLoggedIn())
+        if(POKi.isLoggedIn()) {
+            var user = POKi.getUser();
+            USERID = user.id;
+            USERNAME = user.username;
+            DISPLAYNAME = user.display;
             router.go("/joined-room");
+        }
         else Login.toggle();
     });
 }
